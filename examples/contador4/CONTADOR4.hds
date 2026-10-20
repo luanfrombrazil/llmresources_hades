@@ -1,0 +1,32 @@
+# hades.models.Design file
+#  
+[name] CONTADOR4
+[components]
+hades.models.io.ClockGen CLK 1200 1200 @N 1001 1.0 0.5 0.0 null
+hades.models.io.Ipin ENA 1200 4200 @N 1001 null 1
+hades.models.io.ClockGen RST -2400 4800 @N 1001 1000.0 5.0E-4 0.0 null
+hades.models.gates.InvSmall RINV 1800 5400 @N 1001 5.0E-9
+hades.models.rtlib.register.RegRE CNT 7200 3600 @N 1001 4 0000_B 1.0E-8
+hades.models.Design INC 12000 7200 @N 1001 C:/Users/Luan/Documents/PersonalProjects/llmresources_hades/examples/contador4/INC4.hds
+hades.models.rtlib.io.OpinVector COUNT 24000 9600 @N 1001 4 1.0E-9 0
+hades.models.rtlib.io.IpinVector TARGET 1200 9000 @N 1001 4 0101_B 1.0E-9 0
+hades.models.rtlib.compare.CompareEqual EQ 6000 10800 @N 1001 4 0 1.0E-8
+hades.models.io.Opin MATCH 12000 12600 @N 1001 5.0E-9
+hades.models.rtlib.io.Expander BITS 19800 10200 @N 1001 4 1.0E-8
+hades.models.gates.And2 AND01 21000 13200 @N 1001 1.0E-8
+hades.models.io.Opin LOW2 26400 14400 @N 1001 5.0E-9
+[end components]
+[signals]
+hades.signals.SignalStdLogic1164 n0 2 CLK clk CNT CLK 3 2 3600 2400 6600 2400 2 6600 2400 6600 4800 2 6600 4800 7200 4800 0
+hades.signals.SignalStdLogic1164 n1 2 ENA Y CNT ENA 1 2 1200 4200 7200 4200 0
+hades.signals.SignalStdLogic1164 n2 2 RINV Y CNT NR 3 2 3600 6000 4800 6000 2 4800 6000 4800 5400 2 4800 5400 7200 5400 0
+hades.signals.SignalStdLogic1164 n10 2 RST clk RINV A 1 2 0 6000 1800 6000 0
+hades.signals.SignalStdLogicVector n3 4 5 CNT Q INC A EQ A COUNT A BITS A 9 2 9000 6000 9000 7800 2 9000 7800 12000 7800 2 9000 7800 9000 8400 2 9000 8400 7200 8400 2 7200 8400 7200 10800 2 9000 8400 20400 8400 2 20400 8400 24000 8400 2 24000 8400 24000 9600 2 20400 8400 20400 10200 3 9000 7800 9000 8400 20400 8400
+hades.signals.SignalStdLogicVector n4 4 2 INC Y CNT D 4 2 16800 7800 18000 7800 2 18000 7800 18000 1800 2 18000 1800 9000 1800 2 9000 1800 9000 3600 0
+hades.signals.SignalStdLogicVector n5 4 2 TARGET Y EQ B 2 2 1200 9000 8400 9000 2 8400 9000 8400 10800 0
+hades.signals.SignalStdLogic1164 n6 2 EQ Y MATCH A 1 2 7800 12600 12000 12600 0
+hades.signals.SignalStdLogic1164 n7 2 BITS Y1 AND01 A 4 2 21600 11400 21600 12600 2 21600 12600 20400 12600 2 20400 12600 20400 13800 2 20400 13800 21000 13800 0
+hades.signals.SignalStdLogic1164 n8 2 BITS Y0 AND01 B 4 2 22200 11400 22200 12000 2 22200 12000 19800 12000 2 19800 12000 19800 15000 2 19800 15000 21000 15000 0
+hades.signals.SignalStdLogic1164 n9 2 AND01 Y LOW2 A 1 2 24600 14400 26400 14400 0
+[end signals]
+[end]

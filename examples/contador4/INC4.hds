@@ -1,0 +1,15 @@
+# hades.models.Design file
+#  
+[name] INC4
+[components]
+hades.models.rtlib.io.IpinVector A 0 1200 @N 1001 4 0000_B 1.0E-9 0
+hades.models.rtlib.io.Constant C1 4200 0 @N 1001 4 0001_B 1.0E-8
+hades.models.rtlib.arith.Add ADD 2400 2400 @N 1001 4 0000_B 1.0E-8
+hades.models.rtlib.io.OpinVector Y 7200 6000 @N 1001 4 1.0E-9 0
+[end components]
+[signals]
+hades.signals.SignalStdLogicVector n0 4 2 A Y ADD A 2 2 0 1200 3600 1200 2 3600 1200 3600 2400 0
+hades.signals.SignalStdLogicVector n1 4 2 C1 Y ADD B 1 2 6000 1800 6000 2400 0
+hades.signals.SignalStdLogicVector n2 4 2 ADD SUM Y A 2 2 4800 4800 4800 6000 2 4800 6000 7200 6000 0
+[end signals]
+[end]
