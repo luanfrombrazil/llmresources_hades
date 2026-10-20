@@ -40,21 +40,21 @@ Bloco com portas em lados não padrão (ex.: entrada no topo, saída no topo). S
 
 ## Exemplo
 
-`examples/portas_mistas/`: `PORTAS_MISTAS` (Y = A AND B, Z = A OR B). Entrada A e saída Z no topo, entrada B à esquerda, saída Y à direita.
+`examples/portas_mistas/`: `PORTAS_MISTAS` (Y = A AND B, Z = A OR B), 4800×1200. Entrada A e saída Z no topo; entrada B à esquerda e saída Y à direita, no meio da altura (y=600).
 
 ```
-hades.symbols.BboxRectangle  0 0 4800 2400
-hades.symbols.Rectangle  0 0 4800 2400
+hades.symbols.BboxRectangle  0 0 4800 1200
+hades.symbols.Rectangle  0 0 4800 1200
 hades.symbols.PortSymbol 1200 0 A
 hades.symbols.PortLabel 1200 450 2 A
 hades.symbols.PortSymbol 3600 0 Z
 hades.symbols.PortLabel 3600 450 2 Z
-hades.symbols.PortSymbol 0 1200 B
-hades.symbols.PortLabel 150 1350 B
-hades.symbols.PortSymbol 4800 1200 Y
-hades.symbols.PortLabel 4650 1350 3 Y
-hades.symbols.ClassLabel 2400 2250 2 PORTAS_MISTAS
-hades.symbols.InstanceLabel 2400 2850 2 PORTAS_MISTAS
+hades.symbols.PortSymbol 0 600 B
+hades.symbols.PortLabel 150 750 B
+hades.symbols.PortSymbol 4800 600 Y
+hades.symbols.PortLabel 4650 750 3 Y
+hades.symbols.ClassLabel 2400 1050 2 PORTAS_MISTAS
+hades.symbols.InstanceLabel 2400 1650 2 PORTAS_MISTAS
 ```
 
 Uso: `TESTE_PORTAS_MISTAS.hds` (A desce de cima, Z sobe e segue à direita).
