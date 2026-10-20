@@ -167,8 +167,8 @@ Gerado do hades.jar com parâmetros padrão. ✅ = doc em `components/`. Demais:
 - params: `1001 16 1.0E-9 0`; bbox (0,-600)..(14400,600)
 - portas: `A` in 1b (0,0), `i0` out 1b
 
-## SelectBit
-`hades.models.rtlib.io.SelectBit` — select one bit from an n-bit bus.
+## SelectBit ✅
+`hades.models.rtlib.io.SelectBit` — select one bit from an n-bit bus. → [components/barramentos/SelectBit.md](../components/barramentos/SelectBit.md)
 - params: `1001 16 0 1.0E-8`; bbox (-1200,0)..(1200,600)
 - portas: `A` in 1b (0,0), `Y` out 1b (0,600)
 

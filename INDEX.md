@@ -25,6 +25,7 @@ Abrir só o arquivo do componente necessário. Tamanho = bbox (L×A).
 | [Expander](components/barramentos/Expander.md) | Separa um barramento em n bits | A, Y0..Y{n-1} | 3000×1200 |
 | [ExpanderVertical](components/barramentos/ExpanderVertical.md) | Separa um barramento em n bits (saídas verticais) | A, Y0..Y{n-1} | 1200×4200 |
 | [MergeBits](components/barramentos/MergeBits.md) | Junta n bits em um barramento | Y, A0..A{n-1} | 3000×1200 |
+| [SelectBit](components/barramentos/SelectBit.md) | Seleciona 1 bit de um barramento | A, Y | 2400×600 |
 | [Subset](components/barramentos/Subset.md) | Extrai uma faixa de bits | A, Y | 2400×600 |
 
 ## Portas lógicas de 1 bit

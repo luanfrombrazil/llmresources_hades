@@ -32,8 +32,38 @@
 ## Fios
 
 - Rota padrão (xa,ya)→(xb,yb): `(xa,ya)→(xa,ym)→(xb,ym)→(xb,yb)`, com ym num corredor livre.
-- Vários destinos: tronco + ramos, solda em cada T.
+- Extremidade de segmento = porta, junção (≥3 segmentos) ou dobra (2 segmentos). Exceção: ponta de expansão (abaixo).
+- Não prolongar fio além de uma dobra.
+- Solda só em junções de ≥3 segmentos; dividir o segmento no ponto da junção.
 - Não passar fio sobre porta de outro sinal.
+
+## Estruturas repetidas e barramentos
+
+Agrupar espacialmente objetos relacionados em formato de barramento.
+
+| Situação | Regra |
+|---|---|
+| Blocos repetidos (vias de cache, bancos, bits) | mesma composição, ordem e y em todos; passo constante em x |
+| Espaçamento | 1200 entre componentes do mesmo grupo; ≥ 4800 entre grupos |
+| Consumidor de uma saída | alinhar porta sob porta (mesmo x): fio vertical de 1 segmento |
+| Sinal comum a N destinos (distribuição) | trilho horizontal acima da fileira; derivação vertical por destino; solda em cada derivação |
+| Ponta de expansão | barramento + projeto modular (blocos repetidos): estender o trilho além da última derivação, no sentido de crescimento, deixando a ponta solta para acrescentar módulos (ex.: cache 4 → 5/6 vias). Fora desse caso, terminar na última derivação |
+| Vários trilhos paralelos | espaçamento 600 entre trilhos |
+| N sinais para um destino (coleta) | faixas horizontais paralelas, uma por sinal, passo 600–1200, ordenadas para não cruzar (origens em escada) |
+
+Exemplo (cache 4 vias, grupo = ROM válido, ROM tag, ROM dado):
+
+```
+via k: x0 = 12000 + 26400·k
+  ROM valid  x0          (256×1)
+  ROM tag    x0 + 7200   (256×22)     gap 1200
+  ROM data   x0 + 14400  (256×32)     gap 1200; próximo grupo após 6000
+  SelectBit  x0 + 3600   sob D do valid
+  CompareEqual x0 + 8400 B sob D do tag
+trilhos: tag y=-28800, índice y=-28200, acima de todas as ROMs;
+  terminam em x=108000, além da última derivação (100800): ponta de expansão
+saídas de dado → Mux41: faixas y = 600, 1200, 1800, 2400
+```
 
 ## Reset e estado inicial
 
