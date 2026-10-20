@@ -9,14 +9,15 @@ Referência para gerar arquivos `.hds` (esquemáticos do simulador HADES, `hades
 3. `components/<cat>/<Componente>.md`: parâmetros, portas, larguras, posições.
 4. `LAYOUT.md`: posicionamento, fios, reset.
 5. `SUBCIRCUITOS.md` + `blocks/`: hierarquia (`hades.models.Design`, `.sym`).
-6. `examples/`: arquivos completos e validados.
+6. `ARQUIVOS_PARA_MEMORIA.md`: conteúdo de ROM/RAM/bancos de registradores (`.rom`).
+7. `examples/`: arquivos completos e validados.
 
 Componente fora de `components/`: ver `catalog/` e documentar antes (`ADICIONANDO_COMPONENTES.md`).
 
 ## Estrutura
 
 ```
-FORMATO_HDS.md  LAYOUT.md  SUBCIRCUITOS.md  INDEX.md
+FORMATO_HDS.md  LAYOUT.md  SUBCIRCUITOS.md  ARQUIVOS_PARA_MEMORIA.md  INDEX.md
 ADICIONANDO_COMPONENTES.md  TEMPLATE_COMPONENTE.md
 components/   44 componentes documentados, por categoria
 blocks/       subcircuitos genéricos reutilizáveis

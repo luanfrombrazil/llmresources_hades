@@ -28,6 +28,10 @@ hades.models.rtlib.memory.RAMoe <nome> <x> <y> @N 1001 256 32
 | `nCS` | in | 1 | (0,1800) | esq |
 | `nOE` | in | 1 | (0,3600) | esq |
 
+## Notas
+
+- Arquivo de inicialização: ver `ARQUIVOS_PARA_MEMORIA.md`.
+
 ## Exemplo
 
 ```

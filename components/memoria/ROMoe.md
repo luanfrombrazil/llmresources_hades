@@ -25,3 +25,7 @@ hades.models.rtlib.memory.ROMoe <nome> <x> <y> @N 1001 16 16
 | `D` | out | n_bits | (3600,4800) | base |
 | `nCS` | in | 1 | (0,1800) | esq |
 | `nOE` | in | 1 | (0,3000) | esq |
+
+## Notas
+
+- Arquivo de inicialização: ver `ARQUIVOS_PARA_MEMORIA.md`.

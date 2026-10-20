@@ -30,7 +30,7 @@ hades.models.rtlib.memory.ROM <nome> <x> <y> @N 1001 1024 32
 
 ## Notas
 
-- Formato `.rom`: uma linha por palavra, `addr_hex:dado_hex` (`0000:8C010003`).
+- Arquivo de inicialização: ver `ARQUIVOS_PARA_MEMORIA.md`.
 
 ## Exemplo
 

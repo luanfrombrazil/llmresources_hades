@@ -36,6 +36,7 @@ hades.models.rtlib.memory.RegBank <nome> <x> <y> @N 1001 32 32
 
 ## Notas
 
+- Arquivo de inicialização: ver `ARQUIVOS_PARA_MEMORIA.md`.
 - Para MIPS: MipsRegBank.
 
 ## Exemplo

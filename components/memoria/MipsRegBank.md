@@ -8,13 +8,14 @@ bbox: (0,0)..(7200,4800)
 ## Linha
 
 ```
-hades.models.rtlib.memory.MipsRegBank <nome> <x> <y> @N 1001 32 32
+hades.models.rtlib.memory.MipsRegBank <nome> <x> <y> @N 1001 32 32 [arquivo]
 ```
 
 | # | Parâmetro após `1001` | Significado |
 |---|---|---|
 | 1 | `n_words` | 32 |
 | 2 | `n_bits` | 32 |
+| 3 | `arquivo` | opcional, `.rom` |
 
 ## Portas
 
@@ -38,7 +39,8 @@ hades.models.rtlib.memory.MipsRegBank <nome> <x> <y> @N 1001 32 32
 ## Notas
 
 - Sem clock: nWE = NAND(RegWrite, CLK); nCS ← Gnd.
-- Linha: `1001 32 32`.
+- Valor do arquivo para o registrador 0 é ignorado (fica 0).
+- Arquivo de inicialização: ver `ARQUIVOS_PARA_MEMORIA.md`.
 
 ## Exemplo
 

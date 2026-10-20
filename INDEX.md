@@ -77,6 +77,8 @@ Abrir só o arquivo do componente necessário. Tamanho = bbox (L×A).
 
 ## Memórias e bancos de registradores
 
+Conteúdo inicial: [ARQUIVOS_PARA_MEMORIA.md](ARQUIVOS_PARA_MEMORIA.md).
+
 | Componente | Função | Portas | Tamanho |
 |---|---|---|---|
 | [MipsRegBank](components/memoria/MipsRegBank.md) | Banco de registradores MIPS (32×32) | AR0, AR1, AW0, DR0, DR1, DW0, nWE, nCS | 7200×4800 |

@@ -35,6 +35,7 @@ hades.models.rtlib.memory.RAM <nome> <x> <y> @N 1001 1024 32
 
 ## Notas
 
+- Arquivo de inicialização: ver `ARQUIVOS_PARA_MEMORIA.md`.
 - Escrita síncrona: nWE = NAND(MemWrite, CLK).
 - Endereço por palavra.
 
