@@ -48,7 +48,7 @@ hades.symbols.ClassLabel 150 450 <NOME>
 | `PortLabel x y [3] texto` | rótulo; `3` = alinhado à direita |
 | `InstanceLabel`, `ClassLabel` | rótulos |
 
-Convenção: L = 4800; entradas x=0, saídas x=L; y = 600, 1200, … (lacunas permitidas); A = maior y + 600; rótulos como acima.
+Convenção: L = 4800; entradas x=0, saídas x=L; y = 600, 1200, … (lacunas permitidas); A = maior y + 600; rótulos como acima. Portas no topo/base: `PORTAS_MISTAS.md`.
 
 Exemplo (`blocks/SHIFTLEFT2.sym`):
 

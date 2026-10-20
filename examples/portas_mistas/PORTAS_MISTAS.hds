@@ -1,0 +1,18 @@
+# hades.models.Design file
+#  
+[name] PORTAS_MISTAS
+[components]
+hades.models.io.Ipin A 1200 1200 @N 1001 null 0
+hades.models.io.Ipin B 1200 3600 @N 1001 null 0
+hades.models.gates.And2 AND 4800 1200 @N 1001 1.0E-8
+hades.models.gates.Or2 OR 4800 4800 @N 1001 1.0E-8
+hades.models.io.Opin Y 10800 2400 @N 1001 5.0E-9
+hades.models.io.Opin Z 10800 6000 @N 1001 5.0E-9
+[end components]
+[signals]
+hades.signals.SignalStdLogic1164 n0 3 A Y AND A OR A 5 2 1200 1200 3600 1200 2 3600 1200 3600 1800 2 3600 1800 4800 1800 2 3600 1800 3600 5400 2 3600 5400 4800 5400 1 3600 1800
+hades.signals.SignalStdLogic1164 n1 3 B Y AND B OR B 5 2 1200 3600 2400 3600 2 2400 3600 2400 3000 2 2400 3000 4800 3000 2 2400 3600 2400 6600 2 2400 6600 4800 6600 1 2400 3600
+hades.signals.SignalStdLogic1164 n2 2 AND Y Y A 1 2 8400 2400 10800 2400 0
+hades.signals.SignalStdLogic1164 n3 2 OR Y Z A 1 2 8400 6000 10800 6000 0
+[end signals]
+[end]

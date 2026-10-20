@@ -7,6 +7,7 @@ Todos com caminhos relativos; carregam e simulam no hades.jar.
 | `mux4/` | Mínimo: 1 Mux41 16 bits, entradas e saída |
 | `contador4/` | Contador 4 bits com subcircuito próprio (`INC4`), reset automático, comparador, Expander + And2 |
 | `mips_pipeline/` | Pipeline MIPS de 5 estágios com 8 subcircuitos específicos + 2 de `blocks/` |
+| `portas_mistas/` | Subcircuito com portas no topo, à esquerda e à direita (`PORTAS_MISTAS.md`) |
 
 ## mux4/MUX4.hds
 
