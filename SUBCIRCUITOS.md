@@ -15,9 +15,17 @@ Hierarquia: um `.hds` instanciado em outro via `hades.models.Design`.
 hades.models.Design <instância> <x> <y> @N 1001 <caminho.hds>
 ```
 
-- Caminho relativo à pasta do `.hds` pai (ex.: `IFID.hds`, `../../blocks/SHIFTLEFT2.hds`) ou absoluto com `/` e escapes `\uXXXX`. O editor do HADES regrava caminhos como absolutos ao salvar.
+- Caminho relativo à pasta do `.hds` pai (ex.: `IFID.hds`, `../../blocks/SHIFTLEFT2.hds`) ou absoluto com `/` e escapes `\uXXXX`.
 - Sinal: `<instância> <pino>` (ex.: `IFID PC4_I`).
 - Porta absoluta = âncora + posição do `PortSymbol` no `.sym`.
+
+## Caminhos: padrão de portabilidade
+
+- Padrão: `.hds` + `.sym` do bloco na mesma pasta do `.hds` pai; referenciar só pelo nome (`IFID.hds`). Vale também para `.rom`.
+- `.sym` sempre ao lado do seu `.hds`, mesmo nome base (o HADES troca a extensão do caminho do `.hds`).
+- Blocos compartilhados entre projetos: relativo com subpastas (`../../blocks/X.hds`); a estrutura de pastas precisa ir junto.
+- Não usar caminho absoluto (`C:/...`): quebra ao mover a pasta ou trocar de máquina.
+- O editor do HADES regrava caminhos como absolutos ao salvar: reverter para relativo antes de compartilhar.
 
 ## Formato `.sym`
 
@@ -60,5 +68,5 @@ hades.symbols.ClassLabel 150 450 SHIFTLEFT2
 - [ ] Um pino por porta, nomes únicos.
 - [ ] `.sym` com mesmo nome base, um `PortSymbol` por pino, nomes idênticos.
 - [ ] Larguras no pai = larguras dos pinos.
-- [ ] Caminho correto.
+- [ ] Caminho relativo (padrão: mesma pasta, só o nome).
 - [ ] Bloco genérico novo: adicionar em `blocks/` e em `blocks/README.md`.
