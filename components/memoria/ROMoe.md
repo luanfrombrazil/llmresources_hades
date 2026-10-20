@@ -1,22 +1,17 @@
 # ROMoe — ROM com chip-select e output-enable
 
-- **Classe HADES:** `hades.models.rtlib.memory.ROMoe`
-- **Categoria:** Memórias e bancos de registradores
-- **Dimensões (bbox, relativo à âncora):** x 0..6000, y 0..4800 → 6000 × 4800
+Classe: `hades.models.rtlib.memory.ROMoe`  
+bbox: (0,0)..(6000,4800)
 
-## O que faz
+ROM com nCS e nOE (ativos baixo; desabilitada → Z).
 
-Como ROM, com nCS e nOE ativos em nível baixo (saída em Z quando desabilitada).
-
-## Linha de componente
+## Linha
 
 ```
 hades.models.rtlib.memory.ROMoe <nome> <x> <y> @N 1001 16 16
 ```
 
-Parâmetros depois de `@N 1001` (1001 é a versão do modelo, sempre igual):
-
-| # | Parâmetro | Significado |
+| # | Parâmetro após `1001` | Significado |
 |---|---|---|
 | 1 | `n_words` | palavras |
 | 2 | `n_bits` | bits por palavra |
@@ -24,20 +19,9 @@ Parâmetros depois de `@N 1001` (1001 é a versão do modelo, sempre igual):
 
 ## Portas
 
-| Porta | Direção | Largura (bits) | Posição relativa (x, y) | Lado |
+| Porta | Dir | Largura | Pos (x,y) | Lado |
 |---|---|---|---|---|
-| `A` | entrada | ceil(log2(n_words)) | (0, 2400) | esquerda |
-| `D` | saída | n_bits | (3600, 4800) | base |
-| `nCS` | entrada | 1 | (0, 1800) | esquerda |
-| `nOE` | entrada | 1 | (0, 3000) | esquerda |
-
-Posição absoluta da porta = (x da instância + x relativo, y da instância + y relativo). Coordenadas em unidades HADES (grade de 600).
-
-## Exemplo
-
-```
-hades.models.rtlib.memory.ROMoe i0 6000 6000 @N 1001 16 16
-```
-
----
-Fonte: introspecção do `hades.jar` (portas, posições, bbox, formato de `write()`) + uso real nos seus `.hds`.
+| `A` | in | ceil(log2(n_words)) | (0,2400) | esq |
+| `D` | out | n_bits | (3600,4800) | base |
+| `nCS` | in | 1 | (0,1800) | esq |
+| `nOE` | in | 1 | (0,3000) | esq |

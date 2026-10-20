@@ -7,7 +7,7 @@ hades.models.io.Ipin ENA 1200 4200 @N 1001 null 1
 hades.models.io.ClockGen RST -2400 4800 @N 1001 1000.0 5.0E-4 0.0 null
 hades.models.gates.InvSmall RINV 1800 5400 @N 1001 5.0E-9
 hades.models.rtlib.register.RegRE CNT 7200 3600 @N 1001 4 0000_B 1.0E-8
-hades.models.Design INC 12000 7200 @N 1001 C:/Users/Luan/Documents/PersonalProjects/llmresources_hades/examples/contador4/INC4.hds
+hades.models.Design INC 12000 7200 @N 1001 INC4.hds
 hades.models.rtlib.io.OpinVector COUNT 24000 9600 @N 1001 4 1.0E-9 0
 hades.models.rtlib.io.IpinVector TARGET 1200 9000 @N 1001 4 0101_B 1.0E-9 0
 hades.models.rtlib.compare.CompareEqual EQ 6000 10800 @N 1001 4 0 1.0E-8

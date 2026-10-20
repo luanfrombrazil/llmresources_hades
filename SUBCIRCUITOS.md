@@ -1,38 +1,25 @@
-# Subcircuitos (hierarquia) e arquivos `.sym`
+# Subcircuitos e `.sym`
 
-O HADES monta hierarquia instanciando um `.hds` dentro de outro com a classe `hades.models.Design`. É assim que o seu pipeline usa IFID, IDEX, EXMEM, MEMWB, CONTROLLER, ALUCONTROL, FORWARDING UNIT e HAZARD UNIT. A documentação de cada bloco está em `subdesigns/`.
+Hierarquia: um `.hds` instanciado em outro via `hades.models.Design`.
 
-## 1. Criando um bloco
+## Criar bloco
 
-Um bloco é um `.hds` comum em que:
+- Entrada: `hades.models.io.Ipin` (1 bit) ou `hades.models.rtlib.io.IpinVector` (n bits).
+- Saída: `hades.models.io.Opin` ou `hades.models.rtlib.io.OpinVector`.
+- Nome da instância do pino = nome da porta; `n_bits` = largura.
+- Criar `<nome>.sym` na mesma pasta do `<nome>.hds`.
 
-- cada **entrada** do bloco é um `hades.models.io.Ipin` (1 bit) ou `hades.models.rtlib.io.IpinVector` (n bits);
-- cada **saída** é um `hades.models.io.Opin` (1 bit) ou `hades.models.rtlib.io.OpinVector` (n bits);
-- o **nome da instância** desses pinos é o nome da porta do bloco (ex.: `IpinVector PC4_I …` cria a porta `PC4_I` de 32 bits).
-
-A largura da porta é o `n_bits` do IpinVector/OpinVector.
-
-## 2. Usando o bloco em outro circuito
+## Instanciar
 
 ```
-hades.models.Design <instância> <x> <y> @N 1001 <caminho_do_hds>
+hades.models.Design <instância> <x> <y> @N 1001 <caminho.hds>
 ```
 
-Exemplo real (PIPELINEPOSHAZ.hds):
+- Caminho relativo à pasta do `.hds` pai (ex.: `IFID.hds`, `../../blocks/SHIFTLEFT2.hds`) ou absoluto com `/` e escapes `\uXXXX`. O editor do HADES regrava caminhos como absolutos ao salvar.
+- Sinal: `<instância> <pino>` (ex.: `IFID PC4_I`).
+- Porta absoluta = âncora + posição do `PortSymbol` no `.sym`.
 
-```
-hades.models.Design IFID 9000 28800 @N 1001 C:/Users/Luan/Documents/CEFET/2026.2/HACKING\u0020AOC/Claude_Hades/IFID.hds
-```
-
-- **Caminho:** absoluto, com `/`, espaço como `\u0020` e acentos como `\uXXXX`. É o que os seus arquivos usam e o mais seguro. Caminho **relativo à pasta do `.hds` pai** também funciona (testado com o leitor do hades.jar), mas o editor regrava como absoluto ao salvar.
-- **Sinais:** referencie as portas pelo nome do pino interno: `IFID PC4_I`, `IFID INSTRUCTION_O`.
-- Posição absoluta da porta = âncora da instância + posição da porta no `.sym` do bloco.
-
-## 3. O arquivo `.sym`
-
-O símbolo de um bloco fica num arquivo com **o mesmo nome do `.hds` e extensão `.sym`, na mesma pasta** (`IFID.hds` → `IFID.sym`). É o `.sym` que define o tamanho do retângulo e onde cada porta aparece. Ao criar um bloco novo, **gere o `.sym` junto**, para não depender do editor.
-
-### Formato
+## Formato `.sym`
 
 ```
 hades.symbols.BboxRectangle  0 0 <L> <A>
@@ -47,21 +34,15 @@ hades.symbols.ClassLabel 150 450 <NOME>
 
 | Linha | Função |
 |---|---|
-| `BboxRectangle 0 0 L A` | caixa de seleção (largura L, altura A) |
-| `Rectangle 0 0 L A` | retângulo desenhado |
-| `PortSymbol x y NOME` | **posição da porta**; o `NOME` tem de ser igual ao nome do Ipin/Opin interno |
-| `PortLabel x y [alinh] texto` | rótulo; `3` = alinhado à direita (usado nas saídas); sem número = à esquerda |
-| `InstanceLabel` / `ClassLabel` | rótulos do nome da instância e do bloco |
+| `BboxRectangle` | caixa de seleção |
+| `Rectangle` | contorno |
+| `PortSymbol x y NOME` | posição da porta; NOME = pino interno |
+| `PortLabel x y [3] texto` | rótulo; `3` = alinhado à direita |
+| `InstanceLabel`, `ClassLabel` | rótulos |
 
-### Regra de layout (a mesma de todos os seus `.sym`)
+Convenção: L = 4800; entradas x=0, saídas x=L; y = 600, 1200, … (lacunas permitidas); A = maior y + 600; rótulos como acima.
 
-- Largura **L = 4800**.
-- Entradas em **x = 0**, saídas em **x = L**.
-- Portas em **y = 600, 1200, 1800, …** (passo 600). Pode haver lacunas para agrupar portas (o IDEX tem).
-- Altura **A = 600 × (máx(nº entradas, nº saídas) + 1)**, ou mais, se houver lacunas: A = maior y de porta + 600.
-- Rótulo de entrada: `PortLabel 150 (y+150) NOME`. Rótulo de saída: `PortLabel (L−150) (y+150) 3 NOME`.
-
-Exemplo completo (`SHIFTLEFT2.sym`, 1 entrada e 1 saída):
+Exemplo (`blocks/SHIFTLEFT2.sym`):
 
 ```
 hades.symbols.BboxRectangle  0 0 4800 1200
@@ -74,10 +55,10 @@ hades.symbols.InstanceLabel 150 1050 SHIFTLEFT2
 hades.symbols.ClassLabel 150 450 SHIFTLEFT2
 ```
 
-## 4. Checklist de um bloco novo
+## Checklist
 
-- [ ] `.hds` do bloco com um Ipin/IpinVector por entrada e um Opin/OpinVector por saída, com nomes únicos e sem espaço.
-- [ ] `.sym` com o mesmo nome base, na mesma pasta, com um `PortSymbol` para cada pino e nomes idênticos.
-- [ ] Larguras dos sinais no circuito pai iguais às larguras dos IpinVector/OpinVector do bloco.
-- [ ] Caminho absoluto e escapado na linha `hades.models.Design`.
-- [ ] Novo `subdesigns/<NOME>.md` documentando o bloco (portas, larguras, posições), como os existentes.
+- [ ] Um pino por porta, nomes únicos.
+- [ ] `.sym` com mesmo nome base, um `PortSymbol` por pino, nomes idênticos.
+- [ ] Larguras no pai = larguras dos pinos.
+- [ ] Caminho correto.
+- [ ] Bloco genérico novo: adicionar em `blocks/` e em `blocks/README.md`.

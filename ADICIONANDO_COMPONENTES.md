@@ -1,29 +1,14 @@
-# Adicionando componentes à biblioteca
+# Documentar componente novo
 
-`components/` documenta os 44 componentes que você já usou. O HADES tem 384 (todos listados em `catalog/`). Quando um circuito precisar de um componente novo, documente-o **antes** de usá-lo, para a próxima LLM encontrar tudo pronto.
-
-## Passo a passo
-
-1. **Ache a classe** em `catalog/<pacote>.md` ou `catalog/components.json` (busque pela descrição, ex.: "adder with carry" → `hades.models.rtlib.arith.Addc`).
-2. **Extraia os dados reais** com a ferramenta `tools/HadesIntro.java`, rodando-a na pasta do `hades.jar`:
+1. Achar a classe em `catalog/<pacote>.md` ou `catalog/components.json` (busca pela descrição).
+2. Extrair dados com `tools/HadesIntro.java` na pasta do `hades.jar` (Windows: `;` no classpath; Linux/macOS: `:`):
    ```
    javac -encoding UTF-8 -cp hades.jar HadesIntro.java
-   java -Djava.awt.headless=true -cp "hades.jar;." HadesIntro --md "hades.models.rtlib.arith.Addc | 1001 32 UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU_B 1.0E-8" > Addc.md
+   java -Djava.awt.headless=true -cp "hades.jar;." HadesIntro --md "<classe> | 1001 <parâmetros>" > <Classe>.md
    ```
-   - Depois de `|` vão os parâmetros exatamente como ficariam depois de `@N` no `.hds`. Sem `|`, ele usa os parâmetros padrão.
-   - A saída já traz a classe, o bbox, a linha de componente e a tabela de portas com as posições.
-   - Para componentes de símbolo dinâmico (como MergeBits), rode com 2 ou 3 valores de `n_bits` e escreva a fórmula das posições.
-3. **Complete o esqueleto** seguindo `TEMPLATE_COMPONENTE.md`: título, categoria, o que faz, significado de cada parâmetro (na ordem da linha), larguras em função dos parâmetros, comportamento e dicas. A descrição em inglês do `catalog/` ajuda.
-4. **Confira no HADES:** monte um circuito mínimo com o componente, abra no editor e veja se as portas e os fios batem.
-5. **Salve** em `components/<categoria>/<Classe>.md` e **adicione uma linha** na tabela da categoria em `INDEX.md`.
-
-## Subcircuitos novos
-
-Ao criar um bloco `.hds` reutilizável, documente-o em `subdesigns/<NOME>.md` (veja `SUBCIRCUITOS.md`): caminho, portas com largura e posição no `.sym`, e função.
-
-## Como esta biblioteca foi gerada
-
-- As **portas, posições, bbox e o formato de parâmetros** vieram da instanciação de cada classe do `hades.jar` (a mesma lógica do `HadesIntro.java`).
-- As **descrições** de `catalog/` vêm dos arquivos `.clb` dentro do `hades.jar`.
-- O **significado dos parâmetros** veio da ordem em que o método `write()` de cada classe grava os campos.
-- Os **exemplos e padrões** vieram dos seus `.hds` em AOC I, Lab AOC I, Lab AOC II e HACKING AOC.
+   - Após `|`: parâmetros como após `@N` no `.hds`. Sem `|`: padrão.
+   - Símbolo dinâmico: rodar com 2–3 valores de n_bits e escrever a fórmula das posições.
+   - Larguras de alguns RTLIB aparecem como 1 até a simulação: deduzir de n_bits.
+3. Completar conforme `TEMPLATE_COMPONENTE.md`. Significado dos parâmetros = ordem gravada por `write()`; descrição em inglês no `catalog/`.
+4. Validar num circuito mínimo no HADES.
+5. Salvar em `components/<cat>/<Classe>.md` e adicionar linha em `INDEX.md`.

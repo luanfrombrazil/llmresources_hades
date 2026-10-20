@@ -1,119 +1,87 @@
-# Formato do arquivo `.hds`
+# Formato `.hds`
 
-Um `.hds` é texto puro, uma entrada por linha, com tokens separados por espaço. Esta especificação foi conferida contra o leitor do `hades.jar` e contra os 1.100 sinais e 1.391 componentes dos seus arquivos: todos seguem exatamente as regras abaixo.
+Texto, uma entrada por linha, tokens separados por espaço.
 
-## 1. Estrutura geral
+## Estrutura
 
 ```
 # hades.models.Design file
 #  
-[name] NOME_DO_CIRCUITO
+[name] NOME
 [components]
-<linha de componente>
-...
+<componente>...
 [end components]
 [signals]
-<linha de sinal>
-...
+<sinal>...
 [end signals]
 [end]
 ```
 
-- As linhas que começam com `#` são comentários. Mantenha as duas primeiras como o HADES grava.
-- `[name]` é o nome do design. Em subcircuitos, é o nome que aparece no símbolo. Use sem espaços (ex.: `HAZARDUNIT`).
-- A ordem das linhas dentro de cada seção é livre. O HADES grava em ordem inversa de criação, então não estranhe.
-- Toda instância citada em `[signals]` precisa existir em `[components]`.
+- `#` = comentário. Manter as duas linhas iniciais.
+- `[name]`: nome do design (rótulo em subcircuitos), sem espaços.
+- Ordem livre dentro das seções. Instâncias citadas em sinais devem existir.
 
-## 2. Linha de componente
+## Componente
 
 ```
-<classe> <instância> <x> <y> @N <parâmetros...>
+<classe> <instância> <x> <y> @N 1001 <parâmetros>
 ```
 
-| Campo | Significado |
+| Campo | Regra |
 |---|---|
-| `<classe>` | nome Java completo, ex.: `hades.models.rtlib.muxes.Mux21` |
-| `<instância>` | nome único no arquivo, sem espaços; use só `[A-Za-z0-9_]`. Com outros caracteres o HADES escapa o nome na linha de componente (`Add_PC\u002b4`), mas não nas linhas de sinal (`Add_PC+4`). Evite. Em `Ipin`/`Opin`/`IpinVector`/`OpinVector` de um subcircuito, **é o nome da porta** que o bloco terá |
-| `<x> <y>` | âncora da instância em unidades HADES; use múltiplos de 600. **y cresce para baixo** |
-| `@N` | orientação normal. É a única usada nos seus arquivos. O HADES aceita `@X`/`@Y` (espelhamento), mas não aceita rotação; **use sempre `@N`** |
-| `<parâmetros>` | começam sempre por `1001` (versão do modelo). O restante depende da classe: veja o arquivo do componente em `components/` |
+| classe | nome Java completo |
+| instância | único, `[A-Za-z0-9_]`. Em Ipin/Opin/IpinVector/OpinVector de subcircuito = nome da porta do bloco. Outros caracteres são escapados (`+`) na linha de componente mas não nos sinais: evitar |
+| x y | âncora, múltiplos de 600 |
+| `@N` | orientação normal. Usar sempre (`@X`/`@Y` espelham; rotação não suportada) |
+| `1001` | versão do modelo, sempre |
+| parâmetros | por classe, ver `components/` |
 
-Exemplo:
-
-```
-hades.models.rtlib.muxes.Mux21 MUXALU 21600 13200 @N 1001 32 00000000000000000000000000000000_B 1.0E-8
-```
-
-### Valores comuns nos parâmetros
+Valores:
 
 | Tipo | Formato | Exemplo |
 |---|---|---|
-| atraso | segundos, notação Java | `1.0E-8` (portas e RTLIB), `5.0E-9` (inversores, Opin), `1.0E-9` (IpinVector/OpinVector) |
-| vetor | bits do MSB ao LSB + `_B`, **exatamente n_bits caracteres**; cada bit em `0 1 X U Z` | `00100_B` |
-| bit (StdLogic) | um caractere | `0`, `1`, `U`, `X` |
-| caminho de arquivo | absoluto, com `/`, espaço = `\u0020`, caracteres não-ASCII = `\uXXXX` | `C:/Users/Luan/Documents/CEFET/2026.2/HACKING\u0020AOC/Claude_Hades/IFID.hds` |
+| atraso | segundos | `1.0E-8` (padrão), `5.0E-9` (InvSmall, Opin), `1.0E-9` (IpinVector, OpinVector) |
+| vetor | MSB…LSB + `_B`, exatamente n caracteres de `01XUZ` | `00100_B` |
+| bit | 1 caractere | `0` `1` `U` `X` |
+| caminho | relativo ao `.hds` (preferido) ou absoluto; `/`; espaço ` `; não-ASCII `\uXXXX` | `../../blocks/SHIFTLEFT2.hds` |
 
-Escapes já vistos nos seus arquivos: espaço `\u0020`, `ç` `\u00e7`, `ã` `\u00e3`. Para outros acentos, use o código Unicode em hexadecimal com 4 dígitos (`á` = `\u00e1`, `é` = `\u00e9`, `õ` = `\u00f5`).
+## Sinal
 
-## 3. Linha de sinal (fio)
-
-Um sinal liga uma saída a uma ou mais entradas e carrega o desenho do fio.
-
-**1 bit:**
 ```
-hades.signals.SignalStdLogic1164 <nome> <nC> <inst₁> <porta₁> … <instₙ> <portaₙ> <nS> <segmento>… <nD> <x y>…
+hades.signals.SignalStdLogic1164   <nome> <nC> (<inst> <porta>)×nC <nS> (2 x1 y1 x2 y2)×nS <nD> (x y)×nD
+hades.signals.SignalStdLogicVector <nome> <largura> <nC> (<inst> <porta>)×nC <nS> (2 x1 y1 x2 y2)×nS <nD> (x y)×nD
 ```
 
-**n bits:**
-```
-hades.signals.SignalStdLogicVector <nome> <largura> <nC> <inst₁> <porta₁> … <nS> <segmento>… <nD> <x y>…
-```
+- `nC` conexões, `nS` segmentos (cada um começa com `2` = nº de pontos), `nD` pontos de solda.
+- Nomes de sinal únicos (`n0`, `n1`, …).
 
-| Campo | Significado |
-|---|---|
-| `<nome>` | nome único do sinal; o HADES usa `n0`, `n1`, … (também aceita nomes como `n21_0`) |
-| `<largura>` | só em `SignalStdLogicVector`: número de bits; igual à largura de todas as portas ligadas |
-| `<nC>` | número de conexões, seguido de `nC` pares `instância porta` |
-| `<nS>` | número de segmentos de fio, seguido de `nS` segmentos |
-| `<segmento>` | sempre `2 x1 y1 x2 y2` (o `2` é o número de pontos; nos seus 1.100 sinais ele é sempre 2) |
-| `<nD>` | número de pontos de solda (junções em T), seguido de `nD` pares `x y` |
-
-Exemplo (de `IFID.hds`): o clock ligado a dois registradores, com 4 segmentos e 1 ponto de solda:
+Exemplo (clock para 2 registradores; 4 segmentos, 1 solda):
 
 ```
 hades.signals.SignalStdLogic1164 n1 3 CLK Y INSTRUCTION CLK PC4 CLK 4 2 1200 12000 1200 17400 2 1200 17400 13200 17400 2 1200 9000 1200 12000 2 1200 12000 13200 12000 1 1200 12000
 ```
 
-Leitura: sinal `n1`; 3 conexões (`CLK.Y`, `INSTRUCTION.CLK`, `PC4.CLK`); 4 segmentos; 1 ponto de solda em (1200, 12000).
+## Regras
 
-### Regras dos sinais
+1. Conectividade = pares `(instância, porta)`. Segmentos são desenho.
+2. Cada porta conectada coincide com uma extremidade de segmento (posição absoluta).
+3. Segmentos ortogonais na grade de 600. Junção de 3+ segmentos: ponto de solda; dividir segmentos na junção.
+4. 1 bit → `SignalStdLogic1164`; vetor → `SignalStdLogicVector` com largura = largura das portas. Mudar largura só via MergeBits/Expander/Subset.
+5. Exatamente uma saída por sinal.
+6. Cada porta em no máximo um sinal.
+7. `... 0 0` (sem segmentos) é aceito, mas invisível no editor: evitar.
 
-1. **Conectividade:** é a lista de pares `(instância, porta)` que liga as portas. Os segmentos são só desenho.
-2. **Desenho:** cada porta conectada deve coincidir com a extremidade de algum segmento, na posição absoluta da porta (âncora da instância + posição relativa da tabela de portas). Use segmentos horizontais e verticais na grade de 600.
-3. **Junções:** quando três ou mais segmentos se encontram num ponto, declare um ponto de solda nele.
-4. **Tipo e largura:** portas de 1 bit usam `SignalStdLogic1164`. Portas vetoriais usam `SignalStdLogicVector` com `<largura>` igual à da porta. Um `MergeBits`/`Expander`/`Subset` é o jeito de mudar de largura; nunca ligue larguras diferentes no mesmo sinal.
-5. **Uma fonte:** cada sinal tem exatamente uma porta de saída (Y, Q, SUM, D da ROM, DOUT, `Y` de Ipin…); as demais são entradas.
-6. **Uma ligação por porta:** cada porta de cada instância aparece em no máximo um sinal.
-7. Um sinal com `0` segmentos e `0` pontos de solda (`... 0 0`) é aceito pelo leitor e funciona, mas fica invisível no editor. Evite.
+Porta de subcircuito: `<instância_do_bloco> <nome_do_pino_interno>`.
 
-## 4. Conexões com subcircuitos
+## Checklist
 
-Uma instância `hades.models.Design` tem como portas os nomes das instâncias `Ipin`/`IpinVector` (entradas) e `Opin`/`OpinVector` (saídas) dentro do `.hds` dela. Num sinal, use `<instância_do_bloco> <nome_da_porta>`:
-
-```
-hades.signals.SignalStdLogicVector n44 32 2 IFID INSTRUCTION_O i8 A 2 2 ...
-```
-
-As posições das portas de um bloco vêm do arquivo `.sym` dele. Veja `SUBCIRCUITOS.md`.
-
-## 5. Checklist antes de entregar um `.hds`
-
-- [ ] Cabeçalho, `[name]` e as 3 marcações de fim (`[end components]`, `[end signals]`, `[end]`).
-- [ ] Todas as linhas de componente com `@N 1001` e os parâmetros na ordem do arquivo do componente.
-- [ ] Vetores `_B` com exatamente n caracteres.
-- [ ] Nomes de instância e de sinal únicos, sem espaços.
-- [ ] Toda porta citada existe naquela classe (atenção a maiúsculas: `clk` do ClockGen, `SUM` do Add, `nWE`).
-- [ ] Larguras consistentes em todos os sinais.
-- [ ] Cada sinal com uma única saída.
-- [ ] Extremidades dos fios exatamente nas posições absolutas das portas.
-- [ ] Caminhos de subcircuitos absolutos e escapados (`\u0020`).
+- [ ] Cabeçalho, `[name]`, `[end components]`, `[end signals]`, `[end]`.
+- [ ] `@N 1001` + parâmetros na ordem do doc.
+- [ ] Vetores `_B` com n caracteres.
+- [ ] Nomes únicos, sem espaço.
+- [ ] Portas existem na classe (maiúsculas: `clk`, `SUM`, `nWE`).
+- [ ] Larguras consistentes.
+- [ ] Uma saída por sinal.
+- [ ] Extremidades nas posições absolutas das portas.
+- [ ] Caminhos de subcircuitos/ROM corretos.
+- [ ] Reset previsto em circuitos sequenciais.

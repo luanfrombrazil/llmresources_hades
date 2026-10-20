@@ -1,22 +1,17 @@
 # RAM — RAM assíncrona
 
-- **Classe HADES:** `hades.models.rtlib.memory.RAM`
-- **Categoria:** Memórias e bancos de registradores
-- **Dimensões (bbox, relativo à âncora):** x 0..6000, y 0..4800 → 6000 × 4800
+Classe: `hades.models.rtlib.memory.RAM`  
+bbox: (0,0)..(6000,4800)
 
-## O que faz
+Memória assíncrona; endereço A, entrada DIN, saída DOUT.
 
-Memória de dados do pipeline. Uma porta de endereço A, entrada DIN e saída DOUT.
-
-## Linha de componente
+## Linha
 
 ```
 hades.models.rtlib.memory.RAM <nome> <x> <y> @N 1001 1024 32
 ```
 
-Parâmetros depois de `@N 1001` (1001 é a versão do modelo, sempre igual):
-
-| # | Parâmetro | Significado |
+| # | Parâmetro após `1001` | Significado |
 |---|---|---|
 | 1 | `n_words` | palavras |
 | 2 | `n_bits` | bits por palavra |
@@ -24,37 +19,28 @@ Parâmetros depois de `@N 1001` (1001 é a versão do modelo, sempre igual):
 
 ## Portas
 
-| Porta | Direção | Largura (bits) | Posição relativa (x, y) | Lado |
+| Porta | Dir | Largura | Pos (x,y) | Lado |
 |---|---|---|---|---|
-| `A` | entrada | ceil(log2(n_words)) | (0, 2400) | esquerda |
-| `DIN` | entrada | n_bits | (3600, 0) | topo |
-| `DOUT` | saída | n_bits | (3600, 4800) | base |
-| `nWE` | entrada | 1 | (0, 3000) | esquerda |
-| `nCS` | entrada | 1 | (0, 1800) | esquerda |
-
-Posição absoluta da porta = (x da instância + x relativo, y da instância + y relativo). Coordenadas em unidades HADES (grade de 600).
+| `A` | in | ceil(log2(n_words)) | (0,2400) | esq |
+| `DIN` | in | n_bits | (3600,0) | topo |
+| `DOUT` | out | n_bits | (3600,4800) | base |
+| `nWE` | in | 1 | (0,3000) | esq |
+| `nCS` | in | 1 | (0,1800) | esq |
 
 ## Comportamento
 
-- nCS='1' → DOUT em Z.
-- nCS='0' e nWE='0' → escreve DIN em mem[A] (por nível, sem clock).
-- nCS='0' e nWE='1' → DOUT = mem[A].
+- nCS=1 → DOUT=Z.
+- nCS=0, nWE=0 → mem[A]=DIN (por nível).
+- nCS=0, nWE=1 → DOUT=mem[A].
 
-## Dicas
+## Notas
 
-- Escrita é assíncrona: gere nWE combinando MemWrite com o clock se precisar de escrita síncrona.
-- Endereço por palavra (use ShiftRightLogic 2 no endereço em bytes).
+- Escrita síncrona: nWE = NAND(MemWrite, CLK).
+- Endereço por palavra.
 
-## Exemplo real (dos seus arquivos)
-
-Arquivo: `Documents\CEFET\2026.2\HACKING AOC\Claude_Hades\PIPELINE.hds`
+## Exemplo
 
 ```
 hades.models.rtlib.memory.RAM i25 103800 27600 @N 1001 1024 32 
 hades.signals.SignalStdLogicVector n81 32 2 i25 DOUT MEMWB MEMDATA_I 6 2 107400 32400 107400 33600 2 107400 33600 111000 33600 2 111000 33600 111000 26400 2 111000 26400 108600 26400 2 108600 26400 108600 21000 2 108600 21000 109800 21000 0
 ```
-
-A segunda linha é um sinal ligado à instância `i25`.
-
----
-Fonte: introspecção do `hades.jar` (portas, posições, bbox, formato de `write()`) + uso real nos seus `.hds`.
