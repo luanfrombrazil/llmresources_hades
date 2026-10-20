@@ -18,6 +18,7 @@ Reset manual: Ipin `NR` (0 → 1) antes de rodar; `ENABLEWRITE` = 1.
 | Desvio em ID | `CompareEqual` 32 entre DR0 e DR1 |
 | Forwarding | 2× `Mux41` 32 (FWDA/FWDB) |
 | Controle | `ExpanderVertical` do opcode → `InvVertical` → `And3Vertical` → `MergeBits` |
+| Roteamento | mão dupla (`LAYOUT.md`): clock/reset/enable no topo; write-back e forwarding pela faixa de volta acima; progressão entre estágios por baixo |
 
 ## Blocos específicos
 

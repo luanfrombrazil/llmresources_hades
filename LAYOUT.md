@@ -22,6 +22,14 @@
 | Memórias | endereço/controle à esq, dado de escrita no topo | base |
 | Subcircuitos (`.sym` padrão) | esq | dir |
 
+## Preferência pela horizontalidade
+
+- Fluxo principal horizontal: esquerda → direita.
+- Símbolos gerados pelo HADES para subcircuitos (`.sym`): entradas sempre à esquerda, saídas sempre à direita.
+- Componentes nativos: 184 de 313 com portas posicionadas são horizontais (entradas esq, saídas dir). Exceções verticais (entradas no topo, saídas na base): RTLIB de dados (Mux, Add, RegRE, ROM/RAM, ALU, logic.*) e portas `*Vertical`.
+- Componente vertical: tratar como descida local a partir de um barramento horizontal; a saída retorna ao fluxo horizontal.
+- Ao escolher entre variantes equivalentes, preferir a horizontal (ex.: `And2` em vez de `And2Vertical`).
+
 ## Posicionamento
 
 1. Colunas por estágio da esquerda para a direita; dados de cima para baixo.
@@ -65,6 +73,20 @@ trilhos: tag y=-28800, índice y=-28200, acima de todas as ROMs;
 saídas de dado → Mux41: faixas y = 600, 1200, 1800, 2400
 ```
 
+## Fluxo em mão dupla
+
+Circuito com estágios (pipeline, caminho de dados): dividir o espaço em duas vias imaginárias, como estrada de mão dupla.
+
+| Via | Posição | Sentido | Sinais |
+|---|---|---|---|
+| Globais | trilhos no topo de tudo | horizontal, derivações descendo | clock, reset, enable |
+| Volta | faixa acima dos componentes | direita → esquerda | write-back, forwarding, alvo de desvio, realimentações |
+| Ida | nível dos componentes e abaixo | esquerda → direita | progressão de dados e controle entre estágios |
+
+- Fio de volta: sobe da origem até sua faixa, corre para a esquerda, desce até o destino.
+- Faixas de volta aninhadas: retorno mais longo na faixa mais alta; passo 600–1200.
+- Nenhum fio de ida usa a faixa de volta, e vice-versa.
+
 ## Reset e estado inicial
 
 - `RegRE` começa em X independentemente do valor na linha. Prever NR=0 no início.
@@ -82,7 +104,7 @@ saídas de dado → Mux41: faixas y = 600, 1200, 1800, 2400
 | Endereço de palavra | ShiftRightLogic 2 → Subset dos bits baixos |
 | Registrador sempre habilitado | ENA ← Ipin valor 1 |
 
-Exemplo completo: `examples/mips_pipeline/README.md`.
+Exemplo completo (inclui fluxo em mão dupla): `examples/mips_pipeline/README.md`.
 
 ## Nomes
 
