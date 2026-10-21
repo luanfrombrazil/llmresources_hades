@@ -73,6 +73,13 @@ Os `make_*.py` abortam com erro ou aviso e imprimem as notas.
 4. `build()` sem erros/avisos → `write()` → `.rom` (`ARQUIVOS_PARA_MEMORIA.md`).
 5. Abrir/simular no HADES. O validador cobre geometria e conectividade, não comportamento.
 
+## Escrita no MipsRegBank (lição do monociclo)
+
+`MipsRegBank` lê as saídas antes de escrever, na mesma avaliação, e escreve por nível. Consequências:
+- Dado, endereço e enable vindos de registradores com atrasos diferentes geram corrida na borda (dado/endereço novos com enable antigo). Ativar `nWE` só depois que todos estabilizam (clock atrasado).
+- Leitura do registrador recém-escrito só atualiza quando alguma entrada muda de novo; terminar a escrita (`nWE` → 1) antes do fim do ciclo força a releitura.
+- Solução em `WBREG`: `nWE = NAND(RegWrite, CLK atrasado 40 ns)` (2 × InvSmall de 2.0E-8): escreve na 1ª metade do ciclo.
+
 ## Convenções do gerador
 
 - Caminhos de subcircuitos e `.rom` sempre relativos (só o nome).
@@ -81,5 +88,5 @@ Os `make_*.py` abortam com erro ou aviso e imprimem as notas.
 ## Estado dos exemplos gerados
 
 - `pipeline_patterson`: carregado e simulado no hades.jar; após o programa de teste, $1…$15 = 5, a, 14, 19, 2d, 14, 4, 14, a, a, a, 0, 0, f, 14 (hex), como esperado; bolha de load-use visível no PC.
-- `monociclo_patterson`: carrega, mas a simulação diverge do esperado (ex.: `sw $3` sobrescreve $3; `beq` não desvia). Causa provável: corrida no `WBREG` ao capturar dado/endereço/controle na mesma borda. Não usar como referência de comportamento até corrigir.
+- `monociclo_patterson`: carregado e simulado no hades.jar; PC = 0, 4, …, 20, 28, 2c, 34, 38, 0 (`beq` e `j` desviam); $1…$11 = 5, a, f, 5, 0, f, f, —, 14, —, 14 (hex; $8 e $10 não são escritos); mem[palavra 25] = f.
 - `pipeline_patterson` tem ROM dentro de `CONTROL` e `ALUCTL` (nota do validador).

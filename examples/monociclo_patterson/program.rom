@@ -8,9 +8,9 @@
 0006:AC030064   # sw  $3, 100($0)        # mem[100] = 15 (palavra 25)
 0007:8C070064   # lw  $7, 100($0)        # $7 = 15
 0008:10670001   # beq $3, $7, +1         # desvia: pula a instrução 9
-0009:00214020   # add $8, $1, $1         # PULADA ($8 fica 0)
+0009:00214020   # add $8, $1, $1         # PULADA ($8 não é escrito)
 000A:00644820   # add $9, $3, $4         # 20
 000B:0800000D   # j   13                 # pula a instrução 12
-000C:00215020   # add $10, $1, $1        # PULADA ($10 fica 0)
+000C:00215020   # add $10, $1, $1        # PULADA ($10 não é escrito)
 000D:01255820   # add $11, $9, $5        # 20
 000E:08000000   # j   0                  # recomeça o programa

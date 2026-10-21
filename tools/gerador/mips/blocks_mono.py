@@ -32,8 +32,8 @@ def blk_jumpaddr():
 
 def blk_wbreg():
     """Registrador de write-back: captura (dado, endereço, palavra de controle) na borda de subida.
-    O banco de registradores escreve a partir das saídas dele (estáveis durante o ciclo todo),
-    o que quebra o laço combinacional banco -> ULA -> dado de escrita."""
+    O banco de registradores escreve a partir das saídas dele na 1ª metade do ciclo (CLK atrasado),
+    o que quebra o laço combinacional banco -> ULA -> dado de escrita sem corrida na borda."""
     d = Design('WBREG')
     xE, xC, xN = 6000, 6600, 7200
     d.add('Ipin', 'CLK', xC, -1200)
@@ -53,18 +53,29 @@ def blk_wbreg():
             d.add('OpinV', out, 19200, ry + 3000, n=w)
             d.wire('q' + pin, [(11400, ry + 2400), (11400, ry + 3000), (19200, ry + 3000)])
         else:
-            d.add('SelectBit', 'SWE', 15000, ry + 3600, n=10, i=0)
-            d.add('Inv', 'NWEINV', 16800, ry + 3600)
-            d.add('Opin', 'NWE', 19200, ry + 4200)
-            d.wire('qCTRL', [(11400, ry + 2400), (11400, ry + 3000), (15000, ry + 3000), (15000, ry + 3600)])
-            d.wire('nW1', [(15000, ry + 4200), (16800, ry + 4200)])
-            d.wire('nW2', [(18600, ry + 4200), (19200, ry + 4200)])
+            # nWE = NAND(RegWrite capturado, CLK atrasado 40 ns): escreve na 1ª metade do ciclo (CLK = 1).
+            # - O atraso garante que DATA_O/ADDR_O/RegWrite (RegRE + SelectBit, ~20 ns) já estejam estáveis
+            #   quando a escrita começa; sem ele a escrita por nível grava dado/endereço novos com enable antigo.
+            # - A escrita termina ~40 ns após a descida do CLK; o MipsRegBank reavalia as leituras nesse momento,
+            #   então uma instrução que lê o registrador recém-escrito vê o valor novo na 2ª metade do ciclo.
+            d.add('SelectBit', 'SWE', 14400, ry + 3000, n=10, i=0)
+            d.add('Inv', 'CLKD1', 9600, ry + 4200, d='2.0E-8')
+            d.add('Inv', 'CLKD2', 12000, ry + 4200, d='2.0E-8')
+            d.add('Nand2', 'NWEGATE', 15600, ry + 3000, d='1.0E-9')
+            d.add('Opin', 'NWE', 20400, ry + 4200)
+            d.wire('qCTRL', [(11400, ry + 2400), (11400, ry + 3000), (14400, ry + 3000)])
+            d.wire('nW1', [(14400, ry + 3600), (15600, ry + 3600)])
+            d.wire('nCK1', [(11400, ry + 4800), (12000, ry + 4800)])
+            d.wire('nCK', [(13800, ry + 4800), (15600, ry + 4800)])
+            d.wire('nW2', [(19200, ry + 4200), (20400, ry + 4200)])
+            yck = ry + 4800
         y0 = ry + 6000
 
     def rail(nm, x, y_top, taps):
         d.wire(nm, [(x, y_top), (x, taps[-1]), (9600, taps[-1])], *[[(x, t), (9600, t)] for t in taps[:-1]])
     rail('rENA', xE, 0, tapsE)
-    rail('rCLK', xC, -1200, tapsC)
+    d.wire('rCLK', [(xC, -1200), (xC, tapsC[-1]), (9600, tapsC[-1])], *[[(xC, t), (9600, t)] for t in tapsC[:-1]],
+           [(xC, tapsC[-1]), (xC, yck), (9600, yck)])
     rail('rNR', xN, -2400, tapsN)
     return Block(d, 6600, 3600, [('DATA_I', 'T', 1800), ('CTRL_I', 'T', 4200), ('CLK', 'R', 1200), ('NR', 'R', 2400),
                                  ('ADDR_I', 'L', 600), ('ADDR_O', 'L', 1800), ('NWE', 'L', 3000),
