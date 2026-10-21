@@ -9,6 +9,19 @@ Hierarquia: um `.hds` instanciado em outro via `hades.models.Design`.
 - Nome da instância do pino = nome da porta; `n_bits` = largura.
 - Criar `<nome>.sym` na mesma pasta do `<nome>.hds`.
 
+## Componentes que não vão dentro de subcircuitos
+
+Componentes com dados internos editáveis ficam sempre no circuito principal (nível superior), nunca dentro de um bloco:
+
+| Tipo | Classes |
+|---|---|
+| Memórias | `ROM`, `ROMoe`, `RAM`, `RAMoe` |
+| Bancos de registradores | `MipsRegBank`, `RegBank` |
+| ULAs configuráveis | `UserDefinedALU`, `microjava.ALU`, `DcoreALU` |
+| Outros com conteúdo/configuração alterado com frequência | ex.: tabelas em memória |
+
+Motivo: dentro de subcircuito, editar o conteúdo e importar/trocar `.rom` no editor do HADES é muito trabalhoso. Blocos recebem e entregam sinais desses componentes pelas portas.
+
 ## Instanciar
 
 ```
@@ -68,5 +81,6 @@ hades.symbols.ClassLabel 150 450 SHIFTLEFT2
 - [ ] Um pino por porta, nomes únicos.
 - [ ] `.sym` com mesmo nome base, um `PortSymbol` por pino, nomes idênticos.
 - [ ] Larguras no pai = larguras dos pinos.
+- [ ] Nenhuma memória, banco de registradores ou ULA configurável dentro do bloco.
 - [ ] Caminho relativo (padrão: mesma pasta, só o nome).
 - [ ] Bloco genérico novo: adicionar em `blocks/` e em `blocks/README.md`.

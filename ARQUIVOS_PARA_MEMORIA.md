@@ -12,6 +12,7 @@ hades.models.rtlib.memory.MipsRegBank REGS 12000 24000 @N 1001 32 32 regs.rom
 
 - 3º parâmetro após `1001`, opcional. Sem arquivo: memória começa zerada.
 - Caminho: padrão relativo, arquivo na mesma pasta do `.hds` (ver `SUBCIRCUITOS.md`).
+- Componentes com `.rom` ficam no circuito principal, nunca dentro de subcircuitos (`SUBCIRCUITOS.md`).
 
 ## Formato
 
