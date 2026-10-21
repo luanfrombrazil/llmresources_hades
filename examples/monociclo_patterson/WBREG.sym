@@ -1,0 +1,20 @@
+hades.symbols.BboxRectangle  0 0 6600 3600
+hades.symbols.Rectangle  0 0 6600 3600
+hades.symbols.PortSymbol 1800 0 DATA_I
+hades.symbols.PortLabel 1800 450 2 DATA_I
+hades.symbols.PortSymbol 4200 0 CTRL_I
+hades.symbols.PortLabel 4200 450 2 CTRL_I
+hades.symbols.PortSymbol 6600 1200 CLK
+hades.symbols.PortLabel 6450 1350 3 CLK
+hades.symbols.PortSymbol 6600 2400 NR
+hades.symbols.PortLabel 6450 2550 3 NR
+hades.symbols.PortSymbol 0 600 ADDR_I
+hades.symbols.PortLabel 150 750 ADDR_I
+hades.symbols.PortSymbol 0 1800 ADDR_O
+hades.symbols.PortLabel 150 1950 ADDR_O
+hades.symbols.PortSymbol 0 3000 NWE
+hades.symbols.PortLabel 150 3150 NWE
+hades.symbols.PortSymbol 1800 3600 DATA_O
+hades.symbols.PortLabel 1800 3450 2 DATA_O
+hades.symbols.ClassLabel 3300 1950 2 WB_REG
+hades.symbols.InstanceLabel 3300 4050 2 WBREG

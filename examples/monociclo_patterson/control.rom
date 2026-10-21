@@ -1,0 +1,7 @@
+# controle principal: endereço = opcode (6 bits), dado = 10 bits
+# D9 RegDst | D8 Jump | D7 Branch | D6 MemRead | D5 MemtoReg | D4 ALUOp1 | D3 ALUOp0 | D2 MemWrite | D1 ALUSrc | D0 RegWrite
+0000:211   # tipo R: RegDst, ALUOp=10, RegWrite
+0002:100   # j: Jump
+0004:088   # beq: Branch, ALUOp=01
+0023:063   # lw: MemRead, MemtoReg, ALUSrc, RegWrite
+002B:006   # sw: MemWrite, ALUSrc

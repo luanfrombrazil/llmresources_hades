@@ -1,0 +1,10 @@
+hades.symbols.BboxRectangle  0 0 5400 3600
+hades.symbols.Rectangle  0 0 5400 3600
+hades.symbols.PortSymbol 5400 1200 INSTR
+hades.symbols.PortLabel 5250 1350 3 INSTR
+hades.symbols.PortSymbol 2400 0 PC4
+hades.symbols.PortLabel 2400 450 2 PC4
+hades.symbols.PortSymbol 0 2400 JADDR
+hades.symbols.PortLabel 150 2550 JADDR
+hades.symbols.ClassLabel 2700 3450 2 JUMP_ADDR
+hades.symbols.InstanceLabel 2700 4050 2 JUMPADDR

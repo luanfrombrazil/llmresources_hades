@@ -1,0 +1,53 @@
+# hades.models.Design file
+#  
+[name] JUMPADDR
+[components]
+hades.models.rtlib.io.IpinVector INSTR 0 0 @N 1001 32 00000000000000000000000000000000_B 1.0E-9 0
+hades.models.rtlib.io.IpinVector PC4 0 -3600 @N 1001 32 00000000000000000000000000000000_B 1.0E-9 0
+hades.models.rtlib.io.Subset SJ 5400 0 @N 1001 32 25 0 00000000000000000000000000_B 1.0E-8
+hades.models.rtlib.io.Subset SP 1200 -3600 @N 1001 32 31 28 0000_B 1.0E-8
+hades.models.rtlib.io.Expander EJ 3000 1800 @N 1001 26 1.0E-8
+hades.models.rtlib.io.Expander EP 600 -1800 @N 1001 4 1.0E-8
+hades.models.rtlib.io.MergeBits WORD 600 4200 @N 1001 32 1.0E-8
+hades.models.io.Gnd G0 22200 3600 @N 1001
+hades.models.rtlib.io.OpinVector JADDR 1200 6600 @N 1001 32 1.0E-9 0
+[end components]
+[signals]
+hades.signals.SignalStdLogicVector nI 32 2 INSTR Y SJ A 1 2 0 0 5400 0 0
+hades.signals.SignalStdLogicVector nP 32 2 PC4 Y SP A 1 2 0 -3600 1200 -3600 0
+hades.signals.SignalStdLogicVector nJ 26 2 SJ Y EJ A 3 2 5400 600 5400 1200 2 5400 1200 3600 1200 2 3600 1200 3600 1800 0
+hades.signals.SignalStdLogicVector nPH 4 2 SP Y EP A 1 2 1200 -3000 1200 -1800 0
+hades.signals.SignalStdLogic1164 j0 2 EJ Y0 WORD A2 1 2 18600 3000 18600 4200 0
+hades.signals.SignalStdLogic1164 j1 2 EJ Y1 WORD A3 1 2 18000 3000 18000 4200 0
+hades.signals.SignalStdLogic1164 j2 2 EJ Y2 WORD A4 1 2 17400 3000 17400 4200 0
+hades.signals.SignalStdLogic1164 j3 2 EJ Y3 WORD A5 1 2 16800 3000 16800 4200 0
+hades.signals.SignalStdLogic1164 j4 2 EJ Y4 WORD A6 1 2 16200 3000 16200 4200 0
+hades.signals.SignalStdLogic1164 j5 2 EJ Y5 WORD A7 1 2 15600 3000 15600 4200 0
+hades.signals.SignalStdLogic1164 j6 2 EJ Y6 WORD A8 1 2 15000 3000 15000 4200 0
+hades.signals.SignalStdLogic1164 j7 2 EJ Y7 WORD A9 1 2 14400 3000 14400 4200 0
+hades.signals.SignalStdLogic1164 j8 2 EJ Y8 WORD A10 1 2 13800 3000 13800 4200 0
+hades.signals.SignalStdLogic1164 j9 2 EJ Y9 WORD A11 1 2 13200 3000 13200 4200 0
+hades.signals.SignalStdLogic1164 j10 2 EJ Y10 WORD A12 1 2 12600 3000 12600 4200 0
+hades.signals.SignalStdLogic1164 j11 2 EJ Y11 WORD A13 1 2 12000 3000 12000 4200 0
+hades.signals.SignalStdLogic1164 j12 2 EJ Y12 WORD A14 1 2 11400 3000 11400 4200 0
+hades.signals.SignalStdLogic1164 j13 2 EJ Y13 WORD A15 1 2 10800 3000 10800 4200 0
+hades.signals.SignalStdLogic1164 j14 2 EJ Y14 WORD A16 1 2 10200 3000 10200 4200 0
+hades.signals.SignalStdLogic1164 j15 2 EJ Y15 WORD A17 1 2 9600 3000 9600 4200 0
+hades.signals.SignalStdLogic1164 j16 2 EJ Y16 WORD A18 1 2 9000 3000 9000 4200 0
+hades.signals.SignalStdLogic1164 j17 2 EJ Y17 WORD A19 1 2 8400 3000 8400 4200 0
+hades.signals.SignalStdLogic1164 j18 2 EJ Y18 WORD A20 1 2 7800 3000 7800 4200 0
+hades.signals.SignalStdLogic1164 j19 2 EJ Y19 WORD A21 1 2 7200 3000 7200 4200 0
+hades.signals.SignalStdLogic1164 j20 2 EJ Y20 WORD A22 1 2 6600 3000 6600 4200 0
+hades.signals.SignalStdLogic1164 j21 2 EJ Y21 WORD A23 1 2 6000 3000 6000 4200 0
+hades.signals.SignalStdLogic1164 j22 2 EJ Y22 WORD A24 1 2 5400 3000 5400 4200 0
+hades.signals.SignalStdLogic1164 j23 2 EJ Y23 WORD A25 1 2 4800 3000 4800 4200 0
+hades.signals.SignalStdLogic1164 j24 2 EJ Y24 WORD A26 1 2 4200 3000 4200 4200 0
+hades.signals.SignalStdLogic1164 j25 2 EJ Y25 WORD A27 1 2 3600 3000 3600 4200 0
+hades.signals.SignalStdLogic1164 p0 2 EP Y0 WORD A28 1 2 3000 -600 3000 4200 0
+hades.signals.SignalStdLogic1164 p1 2 EP Y1 WORD A29 1 2 2400 -600 2400 4200 0
+hades.signals.SignalStdLogic1164 p2 2 EP Y2 WORD A30 1 2 1800 -600 1800 4200 0
+hades.signals.SignalStdLogic1164 p3 2 EP Y3 WORD A31 1 2 1200 -600 1200 4200 0
+hades.signals.SignalStdLogic1164 g 3 G0 GND WORD A1 WORD A0 4 2 22200 3600 19800 3600 2 19800 3600 19200 3600 2 19200 3600 19200 4200 2 19800 3600 19800 4200 1 19800 3600
+hades.signals.SignalStdLogicVector nO 32 2 WORD Y JADDR A 1 2 1200 5400 1200 6600 0
+[end signals]
+[end]
