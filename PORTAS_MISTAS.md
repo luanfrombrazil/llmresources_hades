@@ -31,6 +31,9 @@ Bloco com portas em lados não padrão (ex.: entrada no topo, saída no topo). S
 
 `ClassLabel`/`InstanceLabel` centralizados (`2`) para não colidir com rótulos do topo:
 `ClassLabel <L/2> <A-150> 2 NOME`, `InstanceLabel <L/2> <A+450> 2 NOME` (abaixo da caixa).
+Com portas na base: `ClassLabel` em (L/2, A/2+150) se A < 6000; (L/2, A−750) se A ≥ 6000.
+
+Gerador Python: `Block.standard()` (passos 1–2) e `Block(..., portas)` (passo 3); ver `GERADOR.md` e `tools/gerador/exemplo_portas_mistas.py`.
 
 ## Fios no circuito pai
 

@@ -10,20 +10,21 @@ Referência para gerar arquivos `.hds` (esquemáticos do simulador HADES, `hades
 4. `LAYOUT.md`: posicionamento, fios, reset.
 5. `SUBCIRCUITOS.md` + `blocks/`: hierarquia (`hades.models.Design`, `.sym`). Portas fora do padrão esq/dir: `PORTAS_MISTAS.md`.
 6. `ARQUIVOS_PARA_MEMORIA.md`: conteúdo de ROM/RAM/bancos de registradores (`.rom`).
-7. `examples/`: arquivos completos e validados.
+7. `GERADOR.md`: gerar projetos grandes em Python (`tools/gerador/`), com validação automática.
+8. `examples/`: arquivos completos e validados.
 
 Componente fora de `components/`: ver `catalog/` e documentar antes (`ADICIONANDO_COMPONENTES.md`).
 
 ## Estrutura
 
 ```
-FORMATO_HDS.md  LAYOUT.md  SUBCIRCUITOS.md  PORTAS_MISTAS.md  ARQUIVOS_PARA_MEMORIA.md  INDEX.md
+FORMATO_HDS.md  LAYOUT.md  SUBCIRCUITOS.md  PORTAS_MISTAS.md  ARQUIVOS_PARA_MEMORIA.md  GERADOR.md  INDEX.md
 ADICIONANDO_COMPONENTES.md  TEMPLATE_COMPONENTE.md
 components/   44 componentes documentados, por categoria
 blocks/       subcircuitos genéricos reutilizáveis
 catalog/      384 componentes do hades.jar (md + components.json)
 examples/     mux4, contador4, mips_pipeline
-tools/        HadesIntro.java (extrai dados de qualquer componente)
+tools/        HadesIntro.java (extrai dados de qualquer componente); gerador/ (hdslib.py + scripts)
 ```
 
 ## Regras essenciais
