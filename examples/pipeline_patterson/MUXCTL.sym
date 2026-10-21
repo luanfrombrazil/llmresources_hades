@@ -1,0 +1,18 @@
+hades.symbols.BboxRectangle  0 0 2400 4800
+hades.symbols.Rectangle  0 0 2400 4800
+hades.symbols.PortSymbol 1200 0 STALL
+hades.symbols.PortLabel 1200 450 2 STALL
+hades.symbols.PortSymbol 0 1200 WB_I
+hades.symbols.PortLabel 150 1350 WB_I
+hades.symbols.PortSymbol 0 2400 M_I
+hades.symbols.PortLabel 150 2550 M_I
+hades.symbols.PortSymbol 0 3600 EX_I
+hades.symbols.PortLabel 150 3750 EX_I
+hades.symbols.PortSymbol 2400 1200 WB
+hades.symbols.PortLabel 2250 1350 3 WB
+hades.symbols.PortSymbol 2400 2400 M
+hades.symbols.PortLabel 2250 2550 3 M
+hades.symbols.PortSymbol 2400 3600 EX
+hades.symbols.PortLabel 2250 3750 3 EX
+hades.symbols.ClassLabel 1200 4650 2 MUX
+hades.symbols.InstanceLabel 1200 5250 2 MUXCTL

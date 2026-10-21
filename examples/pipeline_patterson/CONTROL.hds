@@ -1,0 +1,28 @@
+# hades.models.Design file
+#  
+[name] CONTROL
+[components]
+hades.models.rtlib.io.IpinVector OPCODE 0 3600 @N 1001 6 000000_B 1.0E-9 0
+hades.models.rtlib.memory.ROM PLA 1200 1200 @N 1001 64 9 control.rom
+hades.models.rtlib.io.SelectBit BRANCH 6000 7800 @N 1001 9 8 1.0E-8
+hades.models.rtlib.io.Subset FWB 8400 7800 @N 1001 9 7 6 00_B 1.0E-8
+hades.models.rtlib.io.Subset FM 10800 7800 @N 1001 9 5 4 00_B 1.0E-8
+hades.models.rtlib.io.Subset FEX 13200 7800 @N 1001 9 3 0 0000_B 1.0E-8
+hades.models.rtlib.io.OpinVector EX 15600 9000 @N 1001 4 1.0E-9 0
+hades.models.rtlib.io.OpinVector M 15600 10200 @N 1001 2 1.0E-9 0
+hades.models.rtlib.io.OpinVector WB 15600 11400 @N 1001 2 1.0E-9 0
+hades.models.gates.And2 TAKEN 7200 12600 @N 1001 1.0E-8
+hades.models.io.Ipin EQ 0 14400 @N 1001 null U
+hades.models.io.Opin FLUSH 12000 13800 @N 1001 5.0E-9
+[end components]
+[signals]
+hades.signals.SignalStdLogicVector nOP 6 2 OPCODE Y PLA A 1 2 0 3600 1200 3600 0
+hades.signals.SignalStdLogicVector nD 9 5 PLA D FEX A BRANCH A FWB A FM A 9 2 4800 6000 4800 6600 2 4800 6600 6000 6600 2 6000 6600 8400 6600 2 8400 6600 10800 6600 2 10800 6600 13200 6600 2 13200 6600 13200 7800 2 6000 6600 6000 7800 2 8400 6600 8400 7800 2 10800 6600 10800 7800 3 6000 6600 8400 6600 10800 6600
+hades.signals.SignalStdLogicVector nEX 4 2 FEX Y EX A 2 2 13200 8400 13200 9000 2 13200 9000 15600 9000 0
+hades.signals.SignalStdLogicVector nM 2 2 FM Y M A 2 2 10800 8400 10800 10200 2 10800 10200 15600 10200 0
+hades.signals.SignalStdLogicVector nWB 2 2 FWB Y WB A 2 2 8400 8400 8400 11400 2 8400 11400 15600 11400 0
+hades.signals.SignalStdLogic1164 nBR 2 BRANCH Y TAKEN A 2 2 6000 8400 6000 13200 2 6000 13200 7200 13200 0
+hades.signals.SignalStdLogic1164 nEQ 2 EQ Y TAKEN B 1 2 0 14400 7200 14400 0
+hades.signals.SignalStdLogic1164 nFL 2 TAKEN Y FLUSH A 1 2 10800 13800 12000 13800 0
+[end signals]
+[end]

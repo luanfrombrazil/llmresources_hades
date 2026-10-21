@@ -1,0 +1,8 @@
+hades.symbols.BboxRectangle  0 0 4800 1200
+hades.symbols.Rectangle  0 0 4800 1200
+hades.symbols.PortSymbol 0 600 INPUT
+hades.symbols.PortLabel 150 750 INPUT
+hades.symbols.PortSymbol 4800 600 OUTPUT
+hades.symbols.PortLabel 4650 750 3 OUTPUT
+hades.symbols.ClassLabel 2400 1050 2 SIGN_EXT
+hades.symbols.InstanceLabel 2400 1650 2 SIGNEXT

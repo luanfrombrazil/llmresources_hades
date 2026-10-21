@@ -1,0 +1,26 @@
+# hades.models.Design file
+#  
+[name] ALUCTL
+[components]
+hades.models.rtlib.io.IpinVector IMM 0 1200 @N 1001 32 00000000000000000000000000000000_B 1.0E-9 0
+hades.models.rtlib.io.IpinVector ALUOP 0 8400 @N 1001 2 00_B 1.0E-9 0
+hades.models.rtlib.io.Subset FUNCT 3600 1800 @N 1001 32 5 0 000000_B 1.0E-8
+hades.models.rtlib.memory.ROM TAB 6000 1200 @N 1001 64 4 aluctl.rom
+hades.models.rtlib.io.Constant OPSUB 13200 3600 @N 1001 4 0110_B 1.0E-8
+hades.models.rtlib.io.Constant OPADD 16800 6600 @N 1001 4 0010_B 1.0E-8
+hades.models.rtlib.io.ExpanderVertical SEL 9600 9600 @N 1001 2 1.0E-8
+hades.models.rtlib.muxes.Mux41 M 12000 9600 @N 1001 4 0000_B 1.0E-8
+hades.models.rtlib.io.OpinVector OP 15600 12600 @N 1001 4 1.0E-9 0
+[end components]
+[signals]
+hades.signals.SignalStdLogicVector nI 32 2 IMM Y FUNCT A 2 2 0 1200 3600 1200 2 3600 1200 3600 1800 0
+hades.signals.SignalStdLogicVector nF 6 2 FUNCT Y TAB A 2 2 3600 2400 3600 3600 2 3600 3600 6000 3600 0
+hades.signals.SignalStdLogicVector nT 4 3 TAB D M A2 M A3 5 2 9600 6000 9600 7200 2 9600 7200 12600 7200 2 12600 7200 13800 7200 2 13800 7200 13800 9600 2 12600 7200 12600 9600 1 12600 7200
+hades.signals.SignalStdLogicVector nSUB 4 2 OPSUB Y M A1 1 2 15000 5400 15000 9600 0
+hades.signals.SignalStdLogicVector nADD 4 2 OPADD Y M A0 3 2 18600 8400 18600 9000 2 18600 9000 16200 9000 2 16200 9000 16200 9600 0
+hades.signals.SignalStdLogicVector nAO 2 2 ALUOP Y SEL A 2 2 0 8400 10200 8400 2 10200 8400 10200 9600 0
+hades.signals.SignalStdLogic1164 nS1 2 SEL Y1 M S1 1 2 10800 10200 12000 10200 0
+hades.signals.SignalStdLogic1164 nS0 2 SEL Y0 M S0 1 2 10800 10800 12000 10800 0
+hades.signals.SignalStdLogicVector nY 4 2 M Y OP A 2 2 14400 11400 14400 12600 2 14400 12600 15600 12600 0
+[end signals]
+[end]

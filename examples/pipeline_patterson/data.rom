@@ -1,0 +1,3 @@
+# memória de dados (endereço = resultado da ULA, bits 9..0)
+0003:00000005   # mem[3] = 5
+0006:0000000A   # mem[6] = 10

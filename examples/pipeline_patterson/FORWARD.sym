@@ -1,0 +1,20 @@
+hades.symbols.BboxRectangle  0 0 12000 3600
+hades.symbols.Rectangle  0 0 12000 3600
+hades.symbols.PortSymbol 1200 0 FWDA
+hades.symbols.PortLabel 1200 450 2 FWDA
+hades.symbols.PortSymbol 10800 0 FWDB
+hades.symbols.PortLabel 10800 450 2 FWDB
+hades.symbols.PortSymbol 0 1200 IDEX_RS
+hades.symbols.PortLabel 150 1350 IDEX_RS
+hades.symbols.PortSymbol 0 2400 IDEX_RT
+hades.symbols.PortLabel 150 2550 IDEX_RT
+hades.symbols.PortSymbol 12000 1200 EXMEM_RD
+hades.symbols.PortLabel 11850 1350 3 EXMEM_RD
+hades.symbols.PortSymbol 12000 2400 EXMEM_RW
+hades.symbols.PortLabel 11850 2550 3 EXMEM_RW
+hades.symbols.PortSymbol 3600 3600 MEMWB_RD
+hades.symbols.PortLabel 3600 3450 2 MEMWB_RD
+hades.symbols.PortSymbol 8400 3600 MEMWB_RW
+hades.symbols.PortLabel 8400 3450 2 MEMWB_RW
+hades.symbols.ClassLabel 6000 1950 2 FORWARDING_UNIT
+hades.symbols.InstanceLabel 6000 4050 2 FORWARD

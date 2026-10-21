@@ -1,0 +1,18 @@
+hades.symbols.BboxRectangle  0 0 7200 3600
+hades.symbols.Rectangle  0 0 7200 3600
+hades.symbols.PortSymbol 1200 0 IFIDWRITE
+hades.symbols.PortLabel 1200 450 2 IFIDWRITE
+hades.symbols.PortSymbol 3600 0 PCWRITE
+hades.symbols.PortLabel 3600 450 2 PCWRITE
+hades.symbols.PortSymbol 0 1200 IFID_RS
+hades.symbols.PortLabel 150 1350 IFID_RS
+hades.symbols.PortSymbol 0 2400 IFID_RT
+hades.symbols.PortLabel 150 2550 IFID_RT
+hades.symbols.PortSymbol 7200 1200 IDEX_MEMREAD
+hades.symbols.PortLabel 7050 1350 3 IDEX_MEMREAD
+hades.symbols.PortSymbol 7200 2400 IDEX_RT
+hades.symbols.PortLabel 7050 2550 3 IDEX_RT
+hades.symbols.PortSymbol 6000 3600 STALL
+hades.symbols.PortLabel 6000 3450 2 STALL
+hades.symbols.ClassLabel 3600 1950 2 HAZARD_DETECTION
+hades.symbols.InstanceLabel 3600 4050 2 HAZARD

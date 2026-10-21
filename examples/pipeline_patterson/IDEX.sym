@@ -1,0 +1,54 @@
+hades.symbols.BboxRectangle  0 0 4800 36600
+hades.symbols.Rectangle  0 0 4800 36600
+hades.symbols.PortSymbol 1200 0 CLK
+hades.symbols.PortLabel 1200 450 2 CLK
+hades.symbols.PortSymbol 2400 0 NR
+hades.symbols.PortLabel 2400 450 2 NR
+hades.symbols.PortSymbol 0 1800 HZ_MEMREAD
+hades.symbols.PortLabel 150 1950 HZ_MEMREAD
+hades.symbols.PortSymbol 0 3000 HZ_RT
+hades.symbols.PortLabel 150 3150 HZ_RT
+hades.symbols.PortSymbol 0 6600 WB_I
+hades.symbols.PortLabel 150 6750 WB_I
+hades.symbols.PortSymbol 0 7800 M_I
+hades.symbols.PortLabel 150 7950 M_I
+hades.symbols.PortSymbol 0 9000 EX_I
+hades.symbols.PortLabel 150 9150 EX_I
+hades.symbols.PortSymbol 0 22800 RD1_I
+hades.symbols.PortLabel 150 22950 RD1_I
+hades.symbols.PortSymbol 0 23400 RD2_I
+hades.symbols.PortLabel 150 23550 RD2_I
+hades.symbols.PortSymbol 0 27600 IMM_I
+hades.symbols.PortLabel 150 27750 IMM_I
+hades.symbols.PortSymbol 0 34200 RS_I
+hades.symbols.PortLabel 150 34350 RS_I
+hades.symbols.PortSymbol 0 34800 RT_I
+hades.symbols.PortLabel 150 34950 RT_I
+hades.symbols.PortSymbol 0 35400 RD_I
+hades.symbols.PortLabel 150 35550 RD_I
+hades.symbols.PortSymbol 4800 6600 WB
+hades.symbols.PortLabel 4650 6750 3 WB
+hades.symbols.PortSymbol 4800 7800 M
+hades.symbols.PortLabel 4650 7950 3 M
+hades.symbols.PortSymbol 4800 15600 RD1
+hades.symbols.PortLabel 4650 15750 3 RD1
+hades.symbols.PortSymbol 4800 16200 RD2
+hades.symbols.PortLabel 4650 16350 3 RD2
+hades.symbols.PortSymbol 4800 19800 IMM
+hades.symbols.PortLabel 4650 19950 3 IMM
+hades.symbols.PortSymbol 4800 21600 ALUSRC
+hades.symbols.PortLabel 4650 21750 3 ALUSRC
+hades.symbols.PortSymbol 4800 24600 ALUOP
+hades.symbols.PortLabel 4650 24750 3 ALUOP
+hades.symbols.PortSymbol 4800 26400 RT
+hades.symbols.PortLabel 4650 26550 3 RT
+hades.symbols.PortSymbol 4800 27000 RD
+hades.symbols.PortLabel 4650 27150 3 RD
+hades.symbols.PortSymbol 4800 28800 REGDST
+hades.symbols.PortLabel 4650 28950 3 REGDST
+hades.symbols.PortSymbol 4800 31800 RS_F
+hades.symbols.PortLabel 4650 31950 3 RS_F
+hades.symbols.PortSymbol 4800 33000 RT_F
+hades.symbols.PortLabel 4650 33150 3 RT_F
+hades.symbols.ClassLabel 2400 36450 2 ID/EX
+hades.symbols.InstanceLabel 2400 37050 2 IDEX

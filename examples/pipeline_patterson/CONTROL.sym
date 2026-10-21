@@ -1,0 +1,16 @@
+hades.symbols.BboxRectangle  0 0 4800 4800
+hades.symbols.Rectangle  0 0 4800 4800
+hades.symbols.PortSymbol 0 2400 OPCODE
+hades.symbols.PortLabel 150 2550 OPCODE
+hades.symbols.PortSymbol 1200 0 FLUSH
+hades.symbols.PortLabel 1200 450 2 FLUSH
+hades.symbols.PortSymbol 4800 1200 WB
+hades.symbols.PortLabel 4650 1350 3 WB
+hades.symbols.PortSymbol 4800 2400 M
+hades.symbols.PortLabel 4650 2550 3 M
+hades.symbols.PortSymbol 4800 3600 EX
+hades.symbols.PortLabel 4650 3750 3 EX
+hades.symbols.PortSymbol 3600 4800 EQ
+hades.symbols.PortLabel 3600 4650 2 EQ
+hades.symbols.ClassLabel 2400 2550 2 CONTROL
+hades.symbols.InstanceLabel 2400 5250 2 CONTROL

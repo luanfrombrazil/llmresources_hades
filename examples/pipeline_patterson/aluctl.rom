@@ -1,0 +1,7 @@
+# ALU control para ALUOp = 1x: endereço = funct, dado = OPC da UserDefinedALU
+# OPC 0 AND, 1 OR, 2 ADD, 6 SUB, 7 SUB (slt não suportado)
+0020:2   # add
+0022:6   # sub
+0024:0   # and
+0025:1   # or
+002A:7   # slt -> sub

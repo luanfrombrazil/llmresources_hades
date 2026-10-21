@@ -8,6 +8,7 @@ Todos com caminhos relativos; carregam e simulam no hades.jar.
 | `contador4/` | Contador 4 bits com subcircuito próprio (`INC4`), reset automático, comparador, Expander + And2 |
 | `mips_pipeline/` | Pipeline MIPS de 5 estágios com 8 subcircuitos específicos + 2 de `blocks/` |
 | `portas_mistas/` | Subcircuito com portas no topo, à esquerda e à direita (`PORTAS_MISTAS.md`) |
+| `pipeline_patterson/` | Pipeline MIPS no modelo final do Patterson, gerado inteiramente por LLM (ver `README.md` da pasta) |
 
 ## mux4/MUX4.hds
 

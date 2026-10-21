@@ -1,0 +1,28 @@
+hades.symbols.BboxRectangle  0 0 4800 36600
+hades.symbols.Rectangle  0 0 4800 36600
+hades.symbols.PortSymbol 1200 0 REGWRITE
+hades.symbols.PortLabel 1200 450 2 REGWRITE
+hades.symbols.PortSymbol 2400 0 CLK
+hades.symbols.PortLabel 2400 450 2 CLK
+hades.symbols.PortSymbol 3600 0 NR
+hades.symbols.PortLabel 3600 450 2 NR
+hades.symbols.PortSymbol 0 6600 WB_I
+hades.symbols.PortLabel 150 6750 WB_I
+hades.symbols.PortSymbol 0 25800 RDATA_I
+hades.symbols.PortLabel 150 25950 RDATA_I
+hades.symbols.PortSymbol 0 26400 ALU_I
+hades.symbols.PortLabel 150 26550 ALU_I
+hades.symbols.PortSymbol 0 27600 RD_I
+hades.symbols.PortLabel 150 27750 RD_I
+hades.symbols.PortSymbol 4800 25800 ALU
+hades.symbols.PortLabel 4650 25950 3 ALU
+hades.symbols.PortSymbol 4800 26400 RDATA
+hades.symbols.PortLabel 4650 26550 3 RDATA
+hades.symbols.PortSymbol 4800 28200 MEMTOREG
+hades.symbols.PortLabel 4650 28350 3 MEMTOREG
+hades.symbols.PortSymbol 1200 36600 RW
+hades.symbols.PortLabel 1200 36450 2 RW
+hades.symbols.PortSymbol 3600 36600 RD
+hades.symbols.PortLabel 3600 36450 2 RD
+hades.symbols.ClassLabel 2400 35850 2 MEM/WB
+hades.symbols.InstanceLabel 2400 37050 2 MEMWB

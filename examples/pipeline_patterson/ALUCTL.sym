@@ -1,0 +1,10 @@
+hades.symbols.BboxRectangle  0 0 3600 2400
+hades.symbols.Rectangle  0 0 3600 2400
+hades.symbols.PortSymbol 0 600 IMM
+hades.symbols.PortLabel 150 750 IMM
+hades.symbols.PortSymbol 0 1800 ALUOP
+hades.symbols.PortLabel 150 1950 ALUOP
+hades.symbols.PortSymbol 3600 1200 OP
+hades.symbols.PortLabel 3450 1350 3 OP
+hades.symbols.ClassLabel 1800 2250 2 ALU_CTRL
+hades.symbols.InstanceLabel 1800 2850 2 ALUCTL
