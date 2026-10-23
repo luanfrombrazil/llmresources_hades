@@ -97,3 +97,12 @@ Usar esta biblioteca para **delegar trabalhos avaliativos** a um modelo e entreg
 - Os arquivos gerados dessa maneira têm características estruturais distintas dos feitos manualmente no editor. Portanto, as detecções de se o arquivo é legitimo e feito por humano é trivial. 
 - O Hades quando usado manualmente gera alguns artefatos e padrões que podem ser usados de FLAGS para detecção de uso de "ia".
 - Estou ciente de todas as diferenças e **não é do meu interesse** criar nenhum tipo de documentação para evitar que elas aconteçam visto que essas diferenças não mudam a performance e não geram bugs no editor.
+
+# 
+"-- Se um homem criar uma máquina para calcular, que mal há nisso?
+
+-- Você pensa que o perigo estava nas engrenagens e nos circuitos, garoto? O problema nunca foram as máquinas superarem os homens em malícia. O perigo real foi que os homens entregaram sua capacidade de pensar às máquinas.
+
+-- Eles se tornaram preguiçosos?
+
+-- Pior do que isso. Eles se tornaram escravos por escolha própria. Ao permitirem que as máquinas decidissem, que as máquinas calculassem o futuro e removessem o peso das escolhas, os seres humanos abdicaram de sua própria alma. Quem tinha as máquinas mais complexas governava os outros. A mente humana decaiu, atrofiou. Nós nos transformamos em rebanhos dependentes de metal e silício." Dune, Frank Herbert.
