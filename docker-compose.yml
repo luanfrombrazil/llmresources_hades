@@ -1,0 +1,15 @@
+# Servidor MCP HADES via HTTP (streamable-http) em http://localhost:8000/mcp
+#   docker compose up -d
+# Para uso local com Claude Desktop/Code prefira stdio (mcp-server/README.md).
+services:
+  hades-mcp:
+    build: .
+    image: hades-mcp
+    environment:
+      HADES_MCP_TRANSPORT: streamable-http
+      HADES_MCP_PORT: "8000"
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./work:/work   # arquivos gerados/validados (save_to, path)
+    restart: unless-stopped

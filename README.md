@@ -25,6 +25,8 @@ blocks/       subcircuitos genéricos reutilizáveis
 catalog/      384 componentes do hades.jar (md + components.json)
 examples/     mux4, contador4, portas_mistas, mips_pipeline, pipeline_patterson, monociclo_patterson
 tools/        HadesIntro.java (extrai dados de qualquer componente); gerador/ (hdslib.py + scripts)
+mcp-server/   servidor MCP (Docker) com as ferramentas da biblioteca
+SKILL.md      skill instalável (`npx skills add`)
 ```
 
 ## Regras essenciais
@@ -35,6 +37,23 @@ tools/        HadesIntro.java (extrai dados de qualquer componente); gerador/ (h
 - Largura do sinal = largura de todas as portas ligadas. 1 bit: `SignalStdLogic1164`.
 - Uma saída por sinal. Nomes únicos, `[A-Za-z0-9_]`.
 - Circuito sequencial precisa de reset (registradores começam em X).
+
+
+## Instalação em agentes
+
+**Skill** (Claude Code, Cursor, Codex, OpenCode, ...): instala a biblioteca inteira como skill.
+
+```
+npx skills add luanfrombrazil/llmresources_hades
+```
+
+**Servidor MCP em Docker**: ferramentas para consultar componentes, gerar `.hds`/`.sym` validados, validar e
+renderizar arquivos existentes e gerar `.rom`. Detalhes em [`mcp-server/README.md`](mcp-server/README.md).
+
+```
+docker build -t hades-mcp .
+claude mcp add hades -- docker run -i --rm -v "$PWD:/work" hades-mcp
+```
 
 
 ## Sobre esta biblioteca: ganhos e riscos
