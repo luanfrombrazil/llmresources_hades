@@ -54,12 +54,17 @@ def _workspace() -> Path | None:
     return p.resolve() if p.is_dir() else None
 
 
+def _inside(ws: Path, p: Path) -> bool:
+    return p == ws or ws in p.parents
+
+
 def _wpath(rel: str, must_exist: bool = False) -> Path:
+    """Caminho no workspace. resolve() segue links simbólicos: um link que aponta para fora é recusado."""
     ws = _workspace()
     if ws is None:
         raise ValueError('sem workspace: monte uma pasta em /work (docker -v "$PWD:/work") ou defina HADES_WORKSPACE')
     p = (ws / rel).resolve()
-    if p != ws and ws not in p.parents:
+    if not _inside(ws, p):
         raise ValueError(f'caminho fora do workspace: {rel}')
     if must_exist and not p.exists():
         raise FileNotFoundError(f'{rel} não existe no workspace')
@@ -71,10 +76,16 @@ def _save(files: dict[str, str], save_to: str | None) -> list[str]:
         return []
     folder = _wpath(save_to)
     folder.mkdir(parents=True, exist_ok=True)
+    targets = {}
+    for name in files:
+        if Path(name).name != name:
+            raise ValueError(f'nome de arquivo inválido: {name}')
+        targets[name] = _wpath(str(Path(save_to) / name))   # recusa link simbólico que escape do workspace
+    ws = _workspace()
     out = []
     for name, text in files.items():
-        (folder / name).write_text(text, encoding='utf-8', newline='\n')
-        out.append(str((folder / name).relative_to(_workspace())))
+        targets[name].write_text(text, encoding='utf-8', newline='\n')
+        out.append(str(targets[name].relative_to(ws)))
     return out
 
 
@@ -207,11 +218,12 @@ def build_design(spec: dict[str, Any], save_to: str | None = None, preview: bool
     return out + [img] if img else out
 
 
-@mcp.tool(annotations=RO)
+@mcp.tool(annotations=RW)
 def make_rom(entries: list[dict[str, Any]], bits: int = 32, words: int | None = None,
              header: str | None = None, save_to: str | None = None) -> dict:
     """Gera conteúdo .rom no padrão da biblioteca (endereço 4 dígitos, dado bits/4 dígitos, comentários).
-    entries: [{"addr": 0, "data": "8C010003", "comment": "lw $1, 3($0)"}]; strings são hex.
+    entries: [{"addr": 0, "data": "8C010003", "comment": "lw $1, 3($0)"}]; strings são sempre hex
+    (prefixo 0x opcional), inteiros JSON são decimais.
     Endereço = índice de PALAVRA (byte/4 se o circuito usa ShiftRightLogic 2).
     save_to: caminho do arquivo no workspace (ex. 'meu_proj/program.rom')."""
     text = rom.make(entries, bits, words, header)
@@ -243,17 +255,21 @@ def _load(hds: str | None, path: str | None, symbols, subdesigns):
             raise ValueError('informe hds (texto) ou path (arquivo no workspace)')
         p = _wpath(path, True); base = p.parent
         hds = p.read_text(encoding='utf-8', errors='replace')
+    ws = _workspace()
     P0 = hdsparse.parse(hds)
     refs = hdsparse.referenced_files(P0)
-    missing = []
+    missing, outside = [], []
     for sub in refs['subcircuits']:
-        stem = sub[:-4] if sub.endswith('.hds') else sub
+        stem = (sub[:-4] if sub.endswith('.hds') else sub).replace('\\', '/')
         found_sym = hdsparse._lookup(symbols, stem + '.sym', '.sym') is not None
         if base is not None:
             for ext, store in (('.sym', symbols), ('.hds', subdesigns)):
                 f = (base / (stem + ext)).resolve()
-                if f.is_file():
-                    store.setdefault(Path(stem).name + ext, f.read_text(encoding='utf-8', errors='replace'))
+                if not _inside(ws, f):          # nunca ler fora do workspace (../, links simbólicos)
+                    outside.append(stem + ext)
+                elif f.is_file():
+                    # chave = caminho como escrito no .hds: a/X e b/X não colidem
+                    store.setdefault(stem + ext, f.read_text(encoding='utf-8', errors='replace'))
                     if ext == '.sym':
                         found_sym = True
                 elif ext == '.sym' and not found_sym:
@@ -264,9 +280,12 @@ def _load(hds: str | None, path: str | None, symbols, subdesigns):
             symbols.setdefault(lib.name, lib.read_text(encoding='utf-8'))
     if base is not None:
         for r in refs['roms']:
-            if not (base / r).is_file():
+            f = (base / r).resolve()
+            if not _inside(ws, f):
+                outside.append(r)
+            elif not f.is_file():
                 missing.append(r)
-    return hds, symbols, subdesigns, refs, missing
+    return hds, symbols, subdesigns, refs, missing, outside
 
 
 @mcp.tool(annotations=RO)
@@ -278,19 +297,21 @@ def validate_hds(hds: str | None = None, path: str | None = None, symbols: dict[
     symbols: {"BLOCO.sym": texto} dos subcircuitos usados; subdesigns: {"BLOCO.hds": texto} (opcional,
     dá direção/largura dos pinos). Retorno: errors (quebram carga/simulação), lint (regras de desenho
     da biblioteca: pontas soltas, diagonais, solda, portas no meio de fio, toques entre sinais),
-    warnings (entradas abertas, componentes não documentados...), referenced_files, missing_files."""
-    hds, symbols, subdesigns, refs, missing = _load(hds, path, symbols, subdesigns)
+    warnings (entradas abertas, componentes não documentados...), referenced_files, missing_files,
+    outside_workspace (referências fora do workspace: não lidas; passe o .sym em symbols)."""
+    hds, symbols, subdesigns, refs, missing, outside = _load(hds, path, symbols, subdesigns)
     P = hdsparse.check(hds, symbols, subdesigns)
     return dict(ok=not P.errors, clean=not P.errors and not P.lint, name=P.name,
                 components=len(P.comps), signals=len(P.sigs), errors=P.errors, lint=P.lint,
-                warnings=P.warnings, referenced_files=refs, missing_files=missing)
+                warnings=P.warnings, referenced_files=refs, missing_files=missing,
+                outside_workspace=outside)
 
 
 @mcp.tool(annotations=RO, structured_output=False)
 def render_hds(hds: str | None = None, path: str | None = None, symbols: dict[str, str] | None = None):
     """Prévia PNG de um .hds (caixas dos componentes, portas, fios coloridos por sinal, pontos de solda).
     Mesmos parâmetros de validate_hds. Bom para conferir layout sem abrir o HADES."""
-    hds, symbols, _, _, _ = _load(hds, path, symbols, None)
+    hds, symbols, *_ = _load(hds, path, symbols, None)
     P = hdsparse.parse(hds, symbols)
     return _png(hdsparse.to_render_design(P))
 

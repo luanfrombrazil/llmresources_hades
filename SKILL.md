@@ -32,7 +32,7 @@ Componente fora de `components/`: procurar em `catalog/` (`catalog/components.js
 
 Se as ferramentas `hades` (`build_design`, `validate_hds`, `render_hds`, `get_component`, `make_rom`...) estiverem
 disponíveis, preferi-las: geram/validam `.hds` sem rodar Python localmente. Instalação em `mcp-server/README.md`
-(Docker: `docker run -i --rm -v "$PWD:/work" ghcr.io/luanfrombrazil/llmresources_hades`).
+(Docker: `docker run -i --rm --user "$(id -u):$(id -g)" -v "$PWD:/work" ghcr.io/luanfrombrazil/llmresources_hades`).
 
 ## Uso acadêmico
 

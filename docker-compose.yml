@@ -10,6 +10,7 @@ services:
       HADES_MCP_PORT: "8000"
     ports:
       - "127.0.0.1:8000:8000"
+    user: "${UID:-1000}:${GID:-1000}"   # dono da pasta ./work no host
     volumes:
       - ./work:/work   # arquivos gerados/validados (save_to, path)
     restart: unless-stopped

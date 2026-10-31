@@ -17,7 +17,7 @@ from pathlib import PurePosixPath
 
 from . import library
 from .library import hdslib
-from .natives import kwargs_from_line
+from .natives import BadParams, kwargs_from_line
 
 G = 600
 NAME_RE = re.compile(r'^[A-Za-z0-9_]+$')
@@ -131,7 +131,11 @@ def _resolve_ports(c: PComp, P: Parsed, symbols, subdesigns):
         c.bbox = s['bbox'] or (0, 0, 0, 0)
         c.block = s
         return
-    nk = kwargs_from_line(c.cls, c.params)
+    try:
+        nk = kwargs_from_line(c.cls, c.params)
+    except BadParams as e:
+        P.errors.append(f'linha {c.lineno}: {c.name}: {e} (ver get_component)')
+        return
     if nk:
         t, kw = nk
         try:

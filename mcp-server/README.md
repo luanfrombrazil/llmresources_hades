@@ -70,11 +70,13 @@ Claude Desktop (`claude_desktop_config.json`) / Cursor (`.cursor/mcp.json`):
 Claude Code:
 
 ```bash
-claude mcp add hades -- docker run -i --rm -v "$PWD:/work" hades-mcp
+claude mcp add hades -- docker run -i --rm --user "$(id -u):$(id -g)" -v "$PWD:/work" hades-mcp
 ```
 
 O volume `/work` é opcional; sem ele as ferramentas devolvem o conteúdo dos arquivos e as de workspace ficam
-indisponíveis.
+indisponíveis. No Linux, use `--user "$(id -u):$(id -g)"` (como acima; no JSON: `"--user", "1000:1000"` com o seu
+uid/gid) para o servidor poder gravar na pasta montada; o usuário padrão da imagem é o uid 1000.
+Todo acesso a arquivos fica restrito ao workspace (inclusive referências `../` e links simbólicos).
 
 ### Docker, HTTP (servidor compartilhado)
 
@@ -91,17 +93,17 @@ o workspace é compartilhado entre todos os clientes.
 ### Sem Docker
 
 ```bash
-pip install ./mcp-server
+pip install -e ./mcp-server        # a partir da raiz do repositório (a biblioteca não é copiada para o pacote)
 HADES_WORKSPACE="$PWD" hades-mcp       # stdio; ou --transport streamable-http --port 8000
 ```
 
-Variáveis: `HADES_LIB_ROOT` (raiz da biblioteca; detectada automaticamente no repositório),
+Variáveis: `HADES_LIB_ROOT` (raiz da biblioteca; detectada no repositório com `pip install -e` ou rodando dentro dele),
 `HADES_WORKSPACE` (padrão `/work` se existir), `HADES_MCP_TRANSPORT`, `HADES_MCP_HOST`, `HADES_MCP_PORT`, `HADES_MCP_PATH`.
 
 ## Testes
 
 ```bash
-pip install './mcp-server[test]'
+pip install -e './mcp-server[test]'
 python -m pytest -q mcp-server/tests
 ```
 

@@ -62,8 +62,13 @@ def _int(s):
     return int(s)
 
 
+class BadParams(ValueError):
+    pass
+
+
 def kwargs_from_line(cls: str, params: list[str]):
-    """Deduz (tipo, kwargs) de native() a partir dos parâmetros após '1001'. None se não for nativo."""
+    """Deduz (tipo, kwargs) de native() a partir dos parâmetros após '1001'.
+    None se a classe não for nativa; BadParams se for nativa e os parâmetros estiverem malformados."""
     types = CLASS_TO_TYPES.get(cls)
     if not types:
         return None
@@ -86,4 +91,4 @@ def kwargs_from_line(cls: str, params: list[str]):
             return t, {'n': _int(p[0]), 'v': p[1].removesuffix('_B')}
         return t, {}
     except (IndexError, ValueError):
-        return None
+        raise BadParams(f'parâmetros malformados para {cls.rsplit(".", 1)[-1]}: {" ".join(p) or "(nenhum)"}') from None

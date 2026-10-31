@@ -21,6 +21,7 @@ Pontos de um caminho: "INST.PORTA" (posição absoluta da porta) ou [x, y].
 from __future__ import annotations
 
 import os
+import re
 import tempfile
 
 from .library import hdslib
@@ -28,6 +29,15 @@ from .library import hdslib
 
 class SpecError(ValueError):
     pass
+
+
+NAME_RE = re.compile(r'^[A-Za-z0-9_]+$')   # FORMATO_HDS.md; também vira nome de arquivo
+
+
+def _check_name(kind: str, name) -> str:
+    if not isinstance(name, str) or not NAME_RE.match(name):
+        raise SpecError(f'{kind} {name!r} inválido: use só [A-Za-z0-9_]')
+    return name
 
 
 def _pt(d, p):
@@ -56,11 +66,11 @@ def _elbow(poly):
 
 
 def _design(spec: dict, blocks: dict) -> hdslib.Design:
-    name = spec.get('name')
-    if not name:
+    if not spec.get('name'):
         raise SpecError('"name" obrigatório')
-    d = hdslib.Design(name)
+    d = hdslib.Design(_check_name('nome de design', spec['name']))
     for c in spec.get('components', []):
+        _check_name('nome de instância', c.get('name'))
         try:
             if c['x'] % 600 or c['y'] % 600:
                 raise SpecError(f'{c["name"]}: âncora ({c["x"]},{c["y"]}) fora da grade de 600')
@@ -73,10 +83,16 @@ def _design(spec: dict, blocks: dict) -> hdslib.Design:
         blk = blocks.get(inst['block'])
         if blk is None:
             raise SpecError(f'instância {inst.get("name")}: subcircuito {inst.get("block")} não definido em "subcircuits"')
+        _check_name('nome de instância', inst.get('name'))
         if inst['name'] in d.comps:
             raise SpecError(f'instância duplicada {inst["name"]}')
         d.addblock(blk, inst['name'], inst['x'], inst['y'])
+    seen_wires = set()
     for w in spec.get('wires', []):
+        _check_name('nome de fio', w.get('name'))
+        if w['name'] in seen_wires:
+            raise SpecError(f'fio duplicado {w["name"]}: nomes de sinal devem ser únicos')
+        seen_wires.add(w['name'])
         polys = []
         for path in w['paths']:
             poly = [_pt(d, p) for p in path]
@@ -107,6 +123,13 @@ def build(spec: dict) -> dict:
     blocks: dict[str, hdslib.Block] = {}
     subs = spec.get('subcircuits') or {}
     # ordem: dependências primeiro (subcircuitos podem instanciar outros)
+    for key, bspec in subs.items():
+        n = bspec.get('name', key)
+        _check_name('nome de subcircuito', key); _check_name('nome de subcircuito', n)
+        if n != key:
+            raise SpecError(f'subcircuito {key!r}: "name" ({n!r}) deve ser igual à chave')
+    if spec.get('name') in subs:
+        raise SpecError(f'design principal e subcircuito com o mesmo nome {spec["name"]!r} (gerariam o mesmo arquivo)')
     pending = dict(subs)
     while pending:
         progressed = False

@@ -52,7 +52,7 @@ renderizar arquivos existentes e gerar `.rom`. Detalhes em [`mcp-server/README.m
 
 ```
 docker build -t hades-mcp .
-claude mcp add hades -- docker run -i --rm -v "$PWD:/work" hades-mcp
+claude mcp add hades -- docker run -i --rm --user "$(id -u):$(id -g)" -v "$PWD:/work" hades-mcp
 ```
 
 

@@ -1,6 +1,6 @@
 # Servidor MCP da biblioteca HADES (mcp-server/README.md).
 #   docker build -t hades-mcp .
-#   docker run -i --rm -v "$PWD:/work" hades-mcp                       # stdio (padrão)
+#   docker run -i --rm --user "$(id -u):$(id -g)" -v "$PWD:/work" hades-mcp   # stdio (padrão); --user para gravar no volume
 #   docker run --rm -p 8000:8000 -e HADES_MCP_TRANSPORT=streamable-http hades-mcp   # HTTP em /mcp
 FROM python:3.12-slim
 

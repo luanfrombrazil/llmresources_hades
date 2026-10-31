@@ -126,3 +126,90 @@ def test_mcp_client_roundtrip(tmp_path, monkeypatch):
             docs = await c.list_resources()
             assert any(str(x.uri) == 'hades://docs/FORMATO_HDS' for x in docs.resources)
     asyncio.run(go())
+
+
+# ---------------------------------------------------------------- regressões (revisão do PR)
+def _mini(name='T'):
+    return {'name': name, 'components': [{'type': 'Ipin', 'name': 'A', 'x': 0, 'y': 0},
+                                         {'type': 'Opin', 'name': 'Y', 'x': 6000, 'y': 0}],
+            'wires': [{'name': 'n0', 'paths': [['A.Y', 'Y.A']]}]}
+
+
+@pytest.mark.parametrize('bad', ['../../tmp/x', 'a/b', 'com espaço', '', '..'])
+def test_design_name_cannot_be_a_path(bad, tmp_path):
+    with pytest.raises(spec.SpecError):
+        spec.build(_mini(bad) if bad else {**_mini(), 'name': bad})
+    sub = {**_mini(), 'subcircuits': {bad or 'X': {**_mini(bad or 'X'), 'name': bad}}}
+    with pytest.raises(spec.SpecError):
+        spec.build(sub)
+
+
+def test_duplicate_design_names_rejected():
+    with pytest.raises(spec.SpecError, match='mesmo nome'):
+        spec.build({**_mini('X'), 'subcircuits': {'X': _mini('X')}})
+
+
+def test_duplicate_wire_names_rejected():
+    s = _mini()
+    s['components'] += [{'type': 'Ipin', 'name': 'B', 'x': 0, 'y': 2400}, {'type': 'Opin', 'name': 'Z', 'x': 6000, 'y': 2400}]
+    s['wires'].append({'name': 'n0', 'paths': [['B.Y', 'Z.A']]})
+    with pytest.raises(spec.SpecError, match='duplicado'):
+        spec.build(s)
+
+
+def test_rom_hex_strings_starting_with_0b():
+    assert rom.make([{'addr': '0B', 'data': '0B000001'}]).strip() == '000B:0B000001'
+    assert rom.make([{'addr': 1, 'data': '0x1f'}]).strip() == '0001:0000001F'
+
+
+def test_malformed_native_params_reported():
+    txt = ('# hades.models.Design file\n[name] T\n[components]\n'
+           'hades.models.rtlib.muxes.Mux21 M 0 0 @N 1001 abc\n[end components]\n[signals]\n[end signals]\n[end]\n')
+    assert any('malformados' in e for e in hdsparse.check(txt).errors)
+
+
+def test_workspace_escape_via_symlink_and_dotdot(tmp_path, monkeypatch):
+    ws = tmp_path / 'ws'; ws.mkdir(); outside = tmp_path / 'secret'; outside.mkdir()
+    (outside / 'S.sym').write_text('hades.symbols.PortSymbol 0 600 LEAK\n')
+    (outside / 'S.hds').write_text('x')
+    monkeypatch.setenv('HADES_WORKSPACE', str(ws))
+    # .hds referenciando subcircuito fora do workspace
+    (ws / 'TOP.hds').write_text('# hades.models.Design file\n[name] TOP\n[components]\n'
+                                'hades.models.Design U 0 0 @N 1001 ../secret/S.hds\n[end components]\n'
+                                '[signals]\n[end signals]\n[end]\n')
+    r = server.validate_hds(path='TOP.hds')
+    assert '../secret/S.sym' in r['outside_workspace'] and 'LEAK' not in json.dumps(r)
+    # link simbólico no destino de save_to
+    (ws / 'out').mkdir(); (ws / 'out' / 'T.hds').symlink_to(outside / 'S.hds')
+    with pytest.raises(ValueError, match='fora do workspace'):
+        server.build_design(_mini(), save_to='out')
+    assert (outside / 'S.hds').read_text() == 'x'
+
+
+def test_subcircuit_paths_do_not_collide(tmp_path, monkeypatch):
+    monkeypatch.setenv('HADES_WORKSPACE', str(tmp_path))
+    for d, port in (('a', 'P'), ('b', 'Q')):
+        (tmp_path / d).mkdir()
+        (tmp_path / d / 'X.sym').write_text(f'hades.symbols.BboxRectangle 0 0 4800 1200\nhades.symbols.PortSymbol 0 600 {port}\n')
+    (tmp_path / 'TOP.hds').write_text(
+        '# hades.models.Design file\n[name] TOP\n[components]\n'
+        'hades.models.Design U1 0 0 @N 1001 a/X.hds\nhades.models.Design U2 0 6000 @N 1001 b/X.hds\n'
+        'hades.models.io.Ipin I 0 600 @N 1001 null 0\n[end components]\n[signals]\n'
+        'hades.signals.SignalStdLogic1164 n0 2 I Y U1 P 0 0\n[end signals]\n[end]\n')
+    r = server.validate_hds(path='TOP.hds')
+    assert not any('não tem porta' in e for e in r['errors']), r['errors']
+
+
+def test_make_rom_is_write_annotated():
+    t = asyncio.run(server.mcp.list_tools())
+    ann = {x.name: x.annotations for x in t}
+    assert ann['make_rom'].read_only_hint is False
+
+
+def test_library_found_from_cwd(tmp_path, monkeypatch):
+    import subprocess, sys
+    code = 'import hades_mcp.library as l; print(l.ROOT)'
+    env = {**os.environ, 'PYTHONPATH': str(ROOT / 'mcp-server')}
+    env.pop('HADES_LIB_ROOT', None)
+    out = subprocess.run([sys.executable, '-c', code], cwd=ROOT / 'examples', env=env, capture_output=True, text=True)
+    assert out.stdout.strip() == str(ROOT)

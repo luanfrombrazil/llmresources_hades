@@ -34,11 +34,15 @@ def _find_root() -> Path:
         if (p / 'INDEX.md').is_file():
             return p
         raise RuntimeError(f'HADES_LIB_ROOT={env} não contém INDEX.md')
-    here = Path(__file__).resolve()
-    for parent in here.parents:
-        if (parent / 'INDEX.md').is_file() and (parent / 'catalog' / 'components.json').is_file():
-            return parent
-    raise RuntimeError('biblioteca HADES não encontrada; defina HADES_LIB_ROOT')
+    ok = lambda p: (p / 'INDEX.md').is_file() and (p / 'catalog' / 'components.json').is_file()
+    cands = list(Path(__file__).resolve().parents)
+    cwd = Path.cwd().resolve()
+    cands += [cwd, *cwd.parents, Path('/opt/hades-lib')]
+    for p in cands:
+        if ok(p):
+            return p
+    raise RuntimeError('biblioteca HADES não encontrada: instale com `pip install -e ./mcp-server` a partir do '
+                       'repositório, rode dentro dele, ou defina HADES_LIB_ROOT=<raiz do repositório>')
 
 
 ROOT = _find_root()

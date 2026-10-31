@@ -10,13 +10,15 @@ LINE = re.compile(r'^\s*([0-9A-Fa-f]+)\s*:\s*([0-9A-Fa-f]+)\s*(?:#(.*))?$')
 def _int(v) -> int:
     if isinstance(v, int):
         return v
-    s = str(v).strip().lower()
-    return int(s, 16) if not s.startswith('0b') else int(s[2:], 2)
+    s = str(v).strip().replace('_', '')
+    if s[:2].lower() == '0x':
+        s = s[2:]
+    return int(s, 16)   # strings são sempre hex: '0B000001' = 0x0B000001 (sem prefixo binário ambíguo)
 
 
 def make(entries: list[dict], bits: int = 32, words: int | None = None, header: str | None = None) -> str:
     """entries: [{"addr": 0 | "0x0", "data": "8C010003" | 123, "comment": "lw $1, 3($0)"}].
-    Endereços e dados em string são hex (aceita prefixo 0x / 0b). Endereço = índice de palavra."""
+    Endereços e dados em string são sempre hex (prefixo 0x opcional); inteiros JSON são decimais. Endereço = índice de palavra."""
     dw = max(1, math.ceil(bits / 4))
     out = []
     if header:
