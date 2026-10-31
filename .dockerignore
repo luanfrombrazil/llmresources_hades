@@ -1,0 +1,7 @@
+.git
+.github
+**/__pycache__
+**/.pytest_cache
+**/saida
+**/*.png
+mcp-server/tests
